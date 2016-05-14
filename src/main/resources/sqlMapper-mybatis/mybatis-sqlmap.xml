@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<!-- 对在此配置文件下的所有cache进行全局性开/关设置，默认true,若无false，其他mapper文件中配置cache不起作用 -->
+		<setting name="cacheEnabled" value="true" />
+		<!-- 全局性设置延迟加载，如果设为关，则所有相关联的都会被初始化加载，默认true -->
+		<setting name="lazyLoadingEnabled" value="true" />
+		<!-- 设置为开的时候，延迟加载的对象可能被任何延迟属性全部加载。否则每个属性都按需加载，默认true -->
+		<setting name="aggressiveLazyLoading" value="true" />
+		<!-- 允许和不允许单条语句返回多个数据集（取决于驱动），默认true -->
+		<setting name="multipleResultSetsEnabled" value="true" />
+		<!-- 使用列标签代替列名称，不同的驱动器有不同的做法。参考一下驱动器文档，或者用这两个不同的选项进行测试一下，默认true -->
+		<setting name="useColumnLabel" value="true" />
+		<!-- 允许jdbc生成主键，需要安装驱动器支持，如果为true，这个设置将强制使用被生成的主键，有一些驱动器 不兼容不过仍然可以执行，默认false -->
+		<setting name="useGeneratedKeys" value="false" />
+
+		<!-- 指定mybatis如何自动映射数据表字段与对象的属性。PARTIAL自动映射简单的，没有嵌套结构； FULL映射复杂结构，可选NONE，PARTIAL，FULL，默认PARTIAL -->
+		<setting name="autoMappingBehavior" value="PARTIAL" />
+		<!-- 配置设设置执行器，SIMPLE执行其他语句，REUSE执行可能重复使用prepared statement语句； BATCH可以重复执行语句和批量更新，可选SIMPLE/REUSE/BATCH，默认SIMPLE -->
+		<setting name="defaultExecutorType" value="SIMPLE" />
+		<!-- 设置句柄超时时间，默认不设置 -->
+		<!-- <setting name="defaultStatementTimeout" value="15000" /> -->
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="map" type="java.util.Map" />
+	</typeAliases>
+	<mappers>
+		<mapper resource="sqlMapper-mybatis/ModelMapper.xml" />
+		<mapper resource="sqlMapper-mybatis/UserMapper.xml"/>
+	</mappers>
+</configuration>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!-- <mvc:annotation-scan/>是告知Spring，启用@Controller注解驱动 -->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- 静态资源访问，防止在servlet中设置拦截 ，可以直接本地去取资源
+		mapping：映射
+		location：本地资源路径，注意必须是webapp根目录下的路径-->
+	<resources mapping="/resources/**" location="/resources/" />
+    <resources mapping="/images/**" location="/images/" />
+    <resources mapping="/js/**" location="/js/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- 将handler method返回的modelAndView基础上，加上目录前缀/WEB-INF/jsp/和文件名称后缀.jsp。
+		例如结果返回的viewName为helloworld，则对应的实际jsp为/WEB-INF/jsp/helloworld.jsp -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<!-- 目录前缀/WEB-INF/jsp -->
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<!-- 文件名称后缀.jsp -->
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<!-- 在xml配置了这个标签后，spring可以自动去扫描base-pack下面或者子包下面的Java文件，如果扫描到有@Component @Controller@Service等这些注解的类，则把这些类注册为bean
+		：如果配置了<context:component-scan>那么<context:annotation-config/>标签就可以不用再xml中配置了，因为前者包含了后者 
+		use-default-filters默认为true，扫描所有的，指定类型的设置为false
+		Use-dafault-filters=”false”的情况下：<context:exclude-filter>指定的不扫描，<context:include-filter>指定的扫描
+		<context:annotation-config> 是用于激活那些已经在spring容器里注册过的bean（无论是通过xml的方式还是通过package sanning的方式）上面的注解
+		<context:component-scan>除了具有<context:annotation-config>的功能之外，<context:component-scan>还可以在指定的package下扫描以及注册javabean 
+		-->
+	<context:component-scan base-package="com.study.springmvc" use-default-filters="true">
+		<!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
+		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  -->
+	</context:component-scan>
+	
+</beans:beans>

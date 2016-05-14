@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 配置了声明式事物和xml配置事物混用 -->
+
+	<!-- 设置代理类型，JDK和CGLIB，一种是基于接口的，一种是基于类的，proxy-target-class为true，则使用基于类的cglib的方式，相反，如果没有写或者是false则通过jdk的基于接口的方式生成代理类 
+		测试的时候如果报 java.lang.ClassCastException: com.sun.proxy.$Proxy11 cannot be cast 
+		to错误，则说明代理类型错误 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<!-- 声明使用注解式事务 -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="druidDataSource" />
+	</bean>
+
+	<!-- xml事物配置说明 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="find*" read-only="true" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="load*" read-only="true" propagation="REQUIRED"
+				rollback-for="Exception" />
+
+			<tx:method name="save*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="insert*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="del*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="update*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="add*" propagation="REQUIRED" rollback-for="Exception" />
+			<tx:method name="store*" propagation="REQUIRED"
+				rollback-for="Exception" />
+			<tx:method name="testService" timeout="3"/>
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="servicePointCut"
+			expression="execution(* com.study.springmvc.service.impl.TestServiceImpl.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointCut" />
+	</aop:config>
+
+	<!-- 数据访问 -->
+	<bean id="baseDao" class="com.study.springmvc.common.db.dao.mybatis.BaseDao_Mybatis">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="druidDataSource" />
+		<property name="configLocation"	value="classpath:/sqlMapper-mybatis/mybatis-sqlmap.xml" />
+		<property name="plugins">
+			<list>
+				<ref bean="pageInterceptor"/>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 分页插件 -->
+	<bean id="pageInterceptor" class="com.study.springmvc.common.db.page.PageUtilInterceptor">
+		<property name="sqlDialect" ref="sqlDialect"/>
+	</bean>
+	
+	<!--当前MyBatis使用的SQL方言 -->
+	<bean id="sqlDialect" class="com.study.springmvc.common.db.sqldialectImpl.MYSQLSQLDialect" />
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="druidDataSource" />
+	</bean>
+</beans>

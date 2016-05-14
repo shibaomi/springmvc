@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="${log.debug:-false}" scan="${log.scan:-false}" scanPeriod="${log.scanPeriod:-60 seconds}">
+	<!-- logback-test.xml文件一般用于测试环境（打包构建不加入包中），logback.xml用于生产 -->
+	<!-- debug属性，开通logback调试模式，输出配置文件检查信息，相当于程序中添加 LoggerContext lc =(LoggerContext)LoggerFactory.getILoggerFactory();StatusPrinter.print(lc); 
+	scan：是否自动扫描配置文件变更，默认不扫描，设置为true，如果不设置scanPeriod属性，则默认每分钟扫描一下，会多少影响性能，不建议设置 ,设置之后每隔16次记录操作进行一次检查
+	scanPeriod：扫描配置文件时间间隔，单位：milliseconds, seconds, minutes or hours，不指定默认milliseconds -->
+	<!-- 指定日志资源文件 -->
+	<property resource="logback.properties"/>
+	<!-- 设置上下文名称，用于不同项目的区分，默认default -->
+	<contextName>${log.contextName:-default}</contextName>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${log.consoleEncoder}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.file}</file>
+		<!-- 默认true，是否默认添加到文件。若为true，添加到以存在的文件尾端，若为false，则覆盖已经存在的文件 -->
+		<append>${log.append:-true}</append>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<!-- 归档文件字段，/home/logs/log.%i.log.zip或 /home/logs/log.%i.log 自动创建父子文件夹（不存在时） 
+				末尾加上.zip或.gz,表示启用压缩归档 i表示序号，第几个文档，最近生成的时间i序号比较小，越往前越大 -->
+			<fileNamePattern>${log.archivesFile}</fileNamePattern>
+			<!-- i的开始最小值 -->
+			<minIndex>${log.archivesFileMinIndex:-1}</minIndex>
+			<!-- i的结束最大值 -->
+			<maxIndex>${log.archivesFileMaxIndex:-5}</maxIndex>
+		</rollingPolicy>
+		
+		<!-- 设置文件达到多少进行触发归档的触发条件，单位有KB, MB and GB ，不写表示字节b-->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<!-- 文件达到5MB时触发，生成新文件，归档文件序号i+1：此时时间归档还没触发 -->
+			<maxFileSize>${log.maxFileSize:-100KB}</maxFileSize>
+		</triggeringPolicy>
+
+		<encoder>
+			<pattern>${log.fileEncoder}</pattern>
+			<!-- 是否立刻写到日志中，否的话可以提高吞吐量，默认true -->
+			<immediateFlush>${log.immediateFlush:-true}</immediateFlush>
+			<!-- 默认为true，若为true，则在打印日志前输出日志样式信息 -->
+			<outputPatternAsHeader>${log.outputPatternAsHeader:-false}</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	
+	<logger name="com.study.springmv" level="DEBUG" additivity="true">
+		<appender-ref ref="FILE" />
+	</logger>
+	
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework.core">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.beans">
+		<level value="info" />
+	</logger>
+	
+	<logger name="org.springframework.context">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web">
+		<level value="info" />
+	</logger>
+	
+	<!-- turn OFF all logging (children can override) -->
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

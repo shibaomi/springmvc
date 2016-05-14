@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DictModelMapper">
+	<!-- 配置给定模式的缓存, 默认的情况，mybatis 的一级缓存是默认开启的,二级缓存是没有开启，除了会话缓存以外，它可以提高性能，且能解决全局依赖。
+		开启二级缓存，只需要在SQL 映射文件中加入简单的一行：<cache/>
+		作用：
+			1.所有在映射文件里的 select 语句都将被缓存。
+			2.所有在映射文件里 insert,update 和 delete 语句会清空缓存。、
+			3.缓存使用“最近很少使用”算法来回收
+			4.缓存不会被设定的时间所清空。
+			5.每个缓存可以存储 1024 个列表或对象的引用（不管查询出来的结果是什么） 。
+			6.缓存将作为“读/写”缓存，意味着获取的对象不是共享的且对调用者是安全的。不会有其它的调用者或线程潜在修改。
+		
+		eviction是缓存的淘汰算法，可选值有"LRU-移除最长时间不被使用的对象"、"FIFO-按对象进入缓存的顺序来移除它们"、
+			"SOFT-移除基于垃圾回收器状态和软引用规则的对象"、"WEAK-更积极地移除基于垃圾收集器状态和弱引用规则的对象"，缺省值是LRU
+		flashInterval指缓存过期时间，单位为毫秒，60000即为60秒，缺省值为空，即只要容量足够，永不过期
+		size指缓存多少个对象，默认值为1024
+		readOnly是否只读，如果为true，则所有相同的sql语句返回的是同一个对象（有助于提高性能，但并发操作同一条数据时，可能不安全），
+			如果设置为false，则相同的sql，后面访问的是cache的clone副本，readOnly为false，此时要结果集对象是可序列化的
+		注意：
+		面对一定规模的数据量，内置的cache方式就派不上用场了;
+		对查询结果集做缓存并不是MyBatis框架擅长的。采用此框架的Application去构建缓存更合理，比如采用OSCache、Memcached
+	-->
+	<cache eviction="LRU" flushInterval="300000" readOnly="true" size="1024"/>	
+	<!-- 也可以使用cache-ref 来引用另外一个缓存。 -->
+	<!-- <cache-ref namespace="mybatis.SomeMapper" /> -->
+	<resultMap id="DictModel" type="com.study.springmvc.dal.model.DictModel">
+		<result column="CODE" property="code"/>
+		<result column="VALUE" property="value"/>
+	</resultMap>
+	
+	<sql id="columnAll"> code,value</sql>
+	
+	<select id="selectByKey" parameterType="string" resultMap="DictModel" useCache="true">
+		SELECT <include refid="columnAll"/> FROM t_sys_dict WHERE code=#{code}
+	</select>
+	<insert id="insertDict" parameterType="spring_dal.dal.model.DictModel">
+		INSERT INTO t_sys_dict(code,value) VALUES(#{code},#{value})
+	</insert>
+	<update id="updateByKey" parameterType="com.study.springmvc.dal.model.DictModel">
+		UPDATE t_sys_dict
+		<!-- 把set中的最后一个‘,’去掉 -->
+		<set>
+			<if test="code!=null and code!=''">
+				code=#{code},
+			</if>
+			value=#{value},
+		</set>
+		<!-- 去除语句中的第一个and或or，并自动添加where关键字 -->
+		<where>
+			 and code=#{code}
+		</where>
+		
+	</update>
+	
+	<update id="updateOther" parameterType="com.study.springmvc.dal.model.DictModel">
+		UPDATE t_sys_dict
+		<set>
+			<if test="code!=null and code!=''">
+				code=#{code},
+			</if>
+			<if test="value!=null and value!=''">
+				value=#{value},
+			</if>
+		</set>
+		<trim prefix="WHERE" suffixOverrides="AND|OR" prefixOverrides="AND|OR">
+			<if test="code!=null and code!=''">
+				and code=#{code} and 
+			</if>
+			<if test="value!=null and value!=''">
+				value=#{value} and
+			</if>
+		</trim>
+		
+	</update>
+	<delete id="deleteByKey" parameterType="com.study.springmvc.dal.model.DictModel">
+		DELETE FROM t_sys_dict
+		<trim prefix="WHERE" suffixOverrides="AND/OR">
+			<if test="code!=null and code!=''">
+				code=#{code} and 
+			</if>
+			<if test="value!=null and value!=''">
+				value=#{value} and
+			</if>
+		</trim>
+	</delete>
+	
+	
+	<select id="selectList" resultMap="DictModel">
+		<!-- 使用 spring_dal.common.constant.Constant类的属性NO常量-->
+		<bind name="status" value="@com.study.springmvc.common.constant.Constant@OTHER" />
+		SELECT <include refid="columnAll"/> 
+		FROM t_sys_dict 
+		<!-- <trim prefix="WHERE" prefixOverrides="AND|OR">相对于where
+				<trim prefix="SET" suffixOverrides=",">相当于set -->
+		<trim prefix="WHERE" suffixOverrides="AND | OR">
+			<if test="codeList!=null">
+				code in
+				<!-- 循环参数列表：
+				item表示集合中每一个元素进行迭代时的别名
+				index指 定一个名字，用于表示在迭代过程中，每次迭代到的位置 
+				open表示该语句以什么开始
+				separator表示在每次进行迭代之间以什么符号作为分隔 符
+				close表示以什么结束
+				collection属性，该属性是必须指定的：如果传入的是单参数且参数类型是一个List的时候，collection属性值为list；
+					如果传入的是单参数且参数类型是一个array数组的时候，collection的属性值为array；
+					如果传入的参数是多个的时候，我们就需要把它们封装成一个Map了，此时collection的属性值就是key的值 -->
+				<foreach collection="codeList" item="item" index="index"  open="("  separator=","  close=")">  
+		        	#{item}   
+		        </foreach>
+		       and 
+			</if>
+			<if test="value!=null and value!='' ">
+				value = #{value} and 
+			</if>
+			
+			<!-- 相对于Java里面的switch，和when /otherwise,第一个when过了不走下面when和otherwise，when都没过走otherwise -->
+			<!-- <choose>
+                <when test="code != null and code!=''">
+                    code=#{code}
+                </when>
+                <when test="value != null and value!=''">
+                    value=#{value}
+                </when>
+                <otherwise>
+                   status=#{status}
+                </otherwise>
+              </choose> -->
+		</trim>
+	</select>
+	
+	<select id="selectPage" parameterType="map" resultMap="DictModel">
+		SELECT <include refid="columnAll"/> FROM t_sys_dict 
+		<where>
+			 <if test="code!=null and code!=''">
+				and code=#{code}  
+			</if>
+			<if test="value!=null and value!=''">
+				and value=#{value} 
+			</if>
+		</where>
+	</select>
+</mapper>

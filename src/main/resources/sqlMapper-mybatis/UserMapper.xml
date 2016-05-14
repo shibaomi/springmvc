@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserModelMapper">
+	<cache eviction="LRU" flushInterval="300000" readOnly="true" size="1024"/>	
+	<resultMap id="UserModel" type="com.study.springmvc.dal.model.UserModel">
+		<result column="USER_ID" property="userNo"/>
+		<result column="USER_NAME" property="name"/>
+	</resultMap>
+	
+	<sql id="columnAll"> USER_ID,USER_NAME</sql>
+	
+	<select id="selectByKey" parameterType="string" resultMap="UserModel" useCache="true">
+		SELECT <include refid="columnAll"/> FROM t_sys_user WHERE USER_ID=#{userNo}
+	</select>
+	<insert id="insertUser" parameterType="com.study.springmvc.dal.model.UserModel">
+		INSERT INTO t_sys_user(<include refid="columnAll"/>) VALUES(#{userNo},#{name})
+	</insert>
+	<update id="updateByKey" parameterType="com.study.springmvc.dal.model.UserModel">
+		UPDATE t_sys_user
+		<!-- 把set中的最后一个‘,’去掉 -->
+		<set>
+			<if test="userNo!=null and userNo!=''">
+				USER_ID=#{userNo},
+			</if>
+			USER_NAME=#{name},
+		</set>
+		<!-- 去除语句中的第一个and或or，并自动添加where关键字 -->
+		<where>
+			 and USER_ID=#{userNo}
+		</where>
+		
+	</update>
+	
+	<delete id="deleteByKey" parameterType="com.study.springmvc.dal.model.UserModel">
+		DELETE FROM t_sys_dict
+		<trim prefix="WHERE" suffixOverrides="AND/OR">
+			<if test="userNo!=null and userNo!=''">
+				USER_ID=#{userNo},
+			</if>
+			<if test="name!=null and name!=''">
+				USER_NAME=#{name} and
+			</if>
+		</trim>
+	</delete>
+</mapper>
