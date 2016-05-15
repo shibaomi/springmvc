@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.study</groupId>
 	<artifactId>springmvc</artifactId>
-	<name>test</name>
+	<name>springmvc</name>
 	<packaging>war</packaging>
 	<version>1.0.0</version>
 	<properties>
@@ -61,30 +61,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>${org.slf4j-version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-			</exclusions>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -154,7 +130,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>druid</artifactId>
-			<version>1.0.16</version>
+			<version>1.0.19</version>
 		</dependency>
 		
 		<dependency>

@@ -34,7 +34,7 @@
 	<select id="selectByKey" parameterType="string" resultMap="DictModel" useCache="true">
 		SELECT <include refid="columnAll"/> FROM t_sys_dict WHERE code=#{code}
 	</select>
-	<insert id="insertDict" parameterType="spring_dal.dal.model.DictModel">
+	<insert id="insertDict" parameterType="com.study.springmvc.dal.model.DictModel">
 		INSERT INTO t_sys_dict(code,value) VALUES(#{code},#{value})
 	</insert>
 	<update id="updateByKey" parameterType="com.study.springmvc.dal.model.DictModel">
