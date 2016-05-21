@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<!-- 定义了WEB应用的名字 -->
-	<display-name>springmvc</display-name>
+	<display-name>springmvctest</display-name>
 	<!-- 声明WEB应用的描述信息 -->
 	<description>springmvc study</description>
 
