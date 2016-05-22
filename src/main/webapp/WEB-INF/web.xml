@@ -49,61 +49,61 @@
 	<!-- 通过错误码来配置error-page -->
 	<error-page>
 		<error-code>401</error-code>
-		<location>/WEB-INF/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>403</error-code>
-		<location>/WEB-INF/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/WEB-INF/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
 	<error-page>
         <error-code>400</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>401</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>405</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>407</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>408</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>414</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>415</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>500</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>501</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
     <error-page>
         <error-code>503</error-code>
-        <location>/WEB-INF/error/error.jsp</location>
+        <location>/error/error.jsp</location>
     </error-page>
 
 	<!-- 通过异常的类型配置error-page -->
 	<error-page>
 		<exception-type>java.lang.NullException</exception-type>
-		<location>/WEB-INF/error/error.jsp</location>
+		<location>/error/error.jsp</location>
 	</error-page>
    <filter>
 		<filter-name>encodingFilter</filter-name>
