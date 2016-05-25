@@ -40,7 +40,7 @@ public class TestServiceImpl implements TestService{
 			log.info("test sfl4j");
 		}
 		UserModel user=new UserModel();
-		user.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+//		user.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		user.setUserNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		Thread.sleep(50000);
 		userDao.saveUserModel(user);

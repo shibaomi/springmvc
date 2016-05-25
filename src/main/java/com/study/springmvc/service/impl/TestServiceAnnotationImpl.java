@@ -30,11 +30,11 @@ public class TestServiceAnnotationImpl implements TestServiceAnnotation{
 	 */
 	@Transactional(rollbackForClassName={"Exception","RuntimeException"},readOnly=true)
 	public void testService() throws Exception {
-		UserModel user=userDao.queryByIdNo("");
+		UserModel user=userDao.queryById(1l);
 		System.out.println("user="+user);
 		UserModel saveUser=new UserModel();
 		saveUser.setUserNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
-		saveUser.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+//		saveUser.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		userDao.saveUserModel(saveUser);
 		List<DictModel> dictList=dictDao.queryListDictModel();
 		if(dictList!=null&&!dictList.isEmpty()){

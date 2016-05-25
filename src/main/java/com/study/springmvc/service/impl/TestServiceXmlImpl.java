@@ -27,11 +27,11 @@ public class TestServiceXmlImpl implements TestServiceXml{
 	 * spring事物管理默认只对RuntimeException异常回滚，其他事物不回滚
 	 */
 	public void testService() throws Exception {
-		UserModel user=userDao.queryByIdNo("");
+		UserModel user=userDao.queryById(1l);
 		System.out.println("user="+user);
 		UserModel saveUser=new UserModel();
 		saveUser.setUserNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
-		saveUser.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+//		saveUser.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		userDao.saveUserModel(saveUser);
 		List<DictModel> dictList=dictDao.queryListDictModel();
 		if(dictList!=null&&!dictList.isEmpty()){
