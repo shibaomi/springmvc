@@ -3,4 +3,5 @@ encoding//src/main/java/com/study/springmvc/dal/model/DictModel.java=UTF-8
 encoding//src/main/java/com/study/springmvc/dal/model/UserModel.java=UTF-8
 encoding//src/main/resources/META-INF/spring/druid/druid-jdbc.properties=UTF-8
 encoding//src/main/resources/logback.properties=UTF-8
+encoding//src/main/webapp/index.jsp=UTF-8
 encoding/<project>=UTF-8

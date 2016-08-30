@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MenuModelMapper">
+	<resultMap id="MenuModel" type="com.study.springmvc.dal.model.MenuModel">
+		<result column="ID" property="id"/>
+		<result column="menu_name" property="menuName"/>
+		<result column="menu_url" property="menuUrl"/>
+		<result column="menu_order" property="menuOrder"/>
+		<result column="menu_desc" property="menuDesc"/>
+		<result column="parent_id" property="parentId"/>
+		<result column="menu_type" property="menuType"/>
+		<result column="own_system" property="ownSystem"/>
+		<result column="sts" property="sts"/>
+		<result column="show_sts" property="showSts"/>
+		<result column="ico_type" property="icoType"/>
+		<result column="ico_msg" property="icoMsg"/>
+		<result column="menu_level" property="menuLevel"/>
+	</resultMap>
+	
+	<sql id="columnAll"> 
+		ID,menu_name,menu_url,menu_order,menu_desc,parent_id,menu_type,own_system,sts,show_sts,ico_type,ico_msg,menu_level
+	</sql>
+	<sql id="whereCondition">
+		<!-- 去除语句中的第一个and或or，并自动添加where关键字 -->
+		<where>
+			 <if test="id!=null and id!=''">
+				and ID=#{id} 
+			</if>
+			<if test="menuName!=null and menuName!=''">
+				and menu_name=#{menuName} 
+			</if>
+			<if test="menuUrl!=null and menuUrl!=''">
+				and menu_url=#{menuUrl} 
+			</if>
+			<if test="menuOrder!=null and menuOrder!=''">
+				and menu_order=#{menuOrder} 
+			</if>
+			<if test="menuDesc!=null and menuDesc!=''">
+				and menu_desc=#{menuDesc} 
+			</if>
+			<if test="parentId!=null and parentId!=''">
+				and parent_id=#{parentId} 
+			</if>
+			<if test="menuType!=null and menuType!=''">
+				and menu_type=#{menuType} 
+			</if>
+			<if test="ownSystem!=null and ownSystem!=''">
+				and own_system=#{ownSystem} 
+			</if>
+			<if test="sts!=null and sts!=''">
+				and sts=#{sts} 
+			</if>
+			<if test="showSts!=null and showSts!=''">
+				and show_sts=#{showSts} 
+			</if>
+			<if test="icoType!=null and icoType!=''">
+				and ico_type=#{icoType} 
+			</if>
+			<if test="icoMsg!=null and icoMsg!=''">
+				and ico_msg=#{icoMsg} 
+			</if>
+			<if test="menuLevel!=null and menuLevel!=''">
+				and menu_level=#{menuLevel} 
+			</if>
+			
+		</where>
+	</sql>
+	
+	<sql id="setCondition">
+		<!-- 把set中的最后一个‘,’去掉 -->
+		<set>
+			<if test="menuName!=null and menuName!=''">
+				menu_name=#{menuName},
+			</if>
+			<if test="menuUrl!=null and menuUrl!=''">
+				menu_url=#{menuUrl},
+			</if>
+			<if test="menuOrder!=null and menuOrder!=''">
+				menu_order=#{menuOrder},
+			</if>
+			<if test="menuDesc!=null and menuDesc!=''">
+				menu_desc=#{menuDesc},
+			</if>
+			<if test="parentId!=null and parentId!=''">
+				parent_id=#{parentId},
+			</if>
+			<if test="menuType!=null and menuType!=''">
+				menu_type=#{menuType},
+			</if>
+			<if test="ownSystem!=null and ownSystem!=''">
+				own_system=#{ownSystem} 
+			</if>
+			<if test="sts!=null and sts!=''">
+				sts=#{sts} 
+			</if>
+			<if test="showSts!=null and showSts!=''">
+				show_sts=#{showSts} 
+			</if>
+			<if test="icoType!=null and icoType!=''">
+				ico_type=#{icoType} 
+			</if>
+			<if test="icoMsg!=null and icoMsg!=''">
+				ico_msg=#{icoMsg} 
+			</if>
+			<if test="menuLevel!=null and menuLevel!=''">
+				menu_level=#{menuLevel} 
+			</if>
+		</set>
+	</sql>
+	
+	<select id="selectByKey" parameterType="String" resultMap="MenuModel">
+		SELECT <include refid="columnAll"/> FROM sys_menu_manage WHERE ID=#{value}
+	</select>
+	
+	<insert id="insertMenu" parameterType="com.study.springmvc.dal.model.MenuModel">
+		INSERT INTO sys_menu_manage(<include refid="columnAll"/>) 
+		VALUES(
+			#{id},#{menuName},#{menuUrl},#{menuOrder},#{menuDesc},#{parentId},#{menuType},#{ownSystem},#{sts},#{showSts},#{icoType},#{icoMsg},#{menuLevel}
+			)
+	</insert>
+	
+	<update id="updateMenu" parameterType="com.study.springmvc.dal.model.MenuModel">
+		UPDATE sys_menu_manage
+		<!-- set条件值 -->
+		<include refid="setCondition"/>
+		<!-- where条件值 -->
+		<include refid="whereCondition"/>
+	</update>
+	
+	<delete id="deleteByKey"  parameterType="String" >
+		DELETE FROM sys_menu_manage where ID=#{value}
+	</delete>
+	
+	<select id="selectList" parameterType="map" resultMap="MenuModel">
+		SELECT <include refid="columnAll"/> FROM sys_menu_manage <include refid="whereCondition"/>
+	</select>
+</mapper>

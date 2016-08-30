@@ -21,13 +21,16 @@
     <resources mapping="/images/**" location="/images/" />
     <resources mapping="/js/**" location="/js/" />
     <resources mapping="/views/**" location="/views/" />
+    <resources mapping="/*.html" location="/" />
+    <resources mapping="/css/**" location="/css/" />
+    <resources mapping="/*.js" location="/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<!-- 将handler method返回的modelAndView基础上，加上目录前缀/WEB-INF/jsp/和文件名称后缀.jsp。
 		例如结果返回的viewName为helloworld，则对应的实际jsp为/WEB-INF/jsp/helloworld.jsp -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 目录前缀/WEB-INF/jsp -->
-		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="prefix" value="/views/" />
 		<!-- 文件名称后缀.jsp -->
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
@@ -43,5 +46,4 @@
 		<!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
 		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  -->
 	</context:component-scan>
-	
 </beans:beans>

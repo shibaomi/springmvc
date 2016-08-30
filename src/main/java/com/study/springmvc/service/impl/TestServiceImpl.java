@@ -42,9 +42,7 @@ public class TestServiceImpl implements TestService{
 		UserModel user=new UserModel();
 //		user.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		user.setUserNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
-		Thread.sleep(50000);
-		userDao.saveUserModel(user);
-		throw new RuntimeException();
+//		userDao.saveUserModel(user);
 	}
 
 	public void addService() throws Exception {

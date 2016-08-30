@@ -1,0 +1,123 @@
+.headerCss{
+	/***顶部菜单设置，渐变背景颜色设置**/
+	background: -webkit-linear-gradient(top,#0060B6 0,RGBA(255,255,255,0) 100%);
+	border-bottom: 4px solid #31708F;
+}
+
+.headerContainer{
+	margin-left: 2px;
+	margin-right: 2px;
+	width: 100%;
+}
+
+.header-nav-right{
+	margin: 0px 0px 0px 5px;
+	padding: 1px 1px 0px 1px;
+	border-width: 1px 1px 0px 1px;
+	border-style: solid;
+	border-color: #AA3939;
+	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+	background: -webkit-linear-gradient(top,#B13535 0,#FF0000 100%);
+	line-height: 4px;
+}
+
+.a-height-color{
+	line-height: 4px !important; 
+	color:#FFF !important;
+	cursor:pointer;
+}
+
+.margin-right20{
+	margin-right: 20px;
+}
+
+.header-nav-left{
+	margin: 0px 0px 0px 5px;
+	padding: 1px 1px 0px 1px;
+	border-width: 1px 1px 0px 1px;
+	border-style: solid;
+	border-color: #0066B2;
+	-webkit-box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+	border-top-left-radius:6px;
+	border-top-right-radius:6px;
+	background: -webkit-linear-gradient(top,#0468B3 0,#6CAAD9 100%);
+	cursor:pointer;/***鼠标手型设置**/
+}
+.header-nav-active{
+	background:#487495;
+}
+
+/* Hide for mobile, show later */
+.left-menu {
+  display: none;
+}
+@media (min-width: 768px) {
+  .left-menu {
+    position: fixed;
+    top: 92px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 4px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 2px solid #31708F;
+    cursor:pointer;
+  }
+}
+
+.iframeDivCss {
+	position: fixed;
+    top: 92px;
+    bottom: 0;
+    padding: 4px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+  .iframeDivCss {
+    position: fixed;
+    top: 92px;
+    bottom: 0;
+    padding: 4px;
+    width: 75%;
+  }
+}
+
+@media (min-width: 992px){
+ .iframeDivCss {
+    width: 83.33333333%;
+ }
+}
+.meun1-border{
+	font-size: 12px;
+	font-weight: 600;
+	color: #4A515B;
+	border: 1px solid #D5D5D5 !important;
+	background: -webkit-linear-gradient(top, #FAFAFA 0, #E9E9E9 100%);
+	margin-bottom: 4px;
+	border-radius: 4px !important;
+}
+
+.meun2-border{
+	margin-right: 2px;
+	margin-bottom: 2px
+}
+
+.menu-active
+	{
+	color: #FFF;
+	/* background: -webkit-linear-gradient(top, #337AB7 0, #E1ECF6 100%); */
+	background:#487495;
+}
+
+/**添加鼠标经过顶部菜单时的样式变化**/
+#topMenuDiv>li:hover,#leftMenuDiv>ul>li>a:hover,#leftMenuDiv>ul>li>ul>li>a:hover{
+    display: block;
+    color: #FFF;
+    background: #487495;
+}

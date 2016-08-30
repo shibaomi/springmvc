@@ -1,2 +1,0 @@
-angularjs的三种写法
-http://localhost:8080/springmvc/views/angular-test/test/index.html
