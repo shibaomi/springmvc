@@ -8,6 +8,7 @@
     border-right: 2px solid #31708F;
     border-top: 1px solid #31708F;
     width: 25%;
+    overflow: auto;
   }
 
 .iframeDivCss {
@@ -15,8 +16,8 @@
     top: 40px;
     bottom: 0;
     right: 0;
-    padding: 4px;
     width: 75%;
+    overflow: auto;
 }
 .headerCss{
 	border-bottom: 2px solid #31708F;
@@ -24,10 +25,5 @@
 }
 
 .tree-memu-info{
-	width:50%;
-	margin-left: auto;
     margin-right: auto;
-}
-.select,select{
-	width:50% !important;
 }

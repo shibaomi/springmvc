@@ -42,7 +42,7 @@
          		<div class="table-responsive self-form tree-memu-info">
          			<h4>菜单详情</h4>
          			<div class="table-responsive">
-         				<form id="form1" >
+         				<form id="form" >
 				            <table class="table table-striped">
 				              <tr>
 				                  <th>所属系统:</th>
@@ -125,7 +125,8 @@
 			                  </tr>
 			                  <tr class="form-group">
 			                  	<td colspan="2" align="center">
-			                  		<button type="submit" id="submit2">Submit</button>
+			                  		<button type="button" class="btn btn-primary btn-lg ff" onclick="savaOrUpdateMenu();">保存</button>
+			                  		<button type="reset" class="btn btn-warning btn-lg ff">重置</button>
 			                  	</td>
 			                  </tr>
 				            </table>
@@ -146,17 +147,5 @@
     <script type="text/javascript" src="../../../views/common/common.js"></script>
 	<script type="text/javascript" src="../../../views/common/requestAjax.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
-	 <script type="text/javascript">
- $(function(){
-   //1. 简单写法：
-   $("form").validation({icon:true});
-   $("button[type='submit']").on('click',function(event){
-     // 2.最后要调用 valid()方法。
-     if ($("form").valid(this,"error!")==false){
-       //$("#error-text").text("error!"); 1.0.4版本已将提示直接内置掉，简化前端。
-       return false;
-     }
-   })  })
-</script>
   </body>
 </html>

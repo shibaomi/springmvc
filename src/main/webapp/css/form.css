@@ -20,6 +20,7 @@ div.self-form div{
 
 .table,table{
 	width:100%;
+	margin-bottom: 0px;
 }
 
 .th,th{
@@ -57,4 +58,13 @@ div.self-form div{
 	margin-left: -18px;
 	float: left;
 	top: 9px;
+}
+
+.select,select{
+	width:50% !important;
+}
+.button,button{
+	margin-left: 20px;
+	margin-right: 20px;
+	width: 120px;
 }
