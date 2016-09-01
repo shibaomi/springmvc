@@ -32,6 +32,7 @@ div.self-form div{
     white-space: nowrap;
     text-align: right;
     font-weight: normal;
+    vertical-align: inherit !important;
 }
 
 .td,td{
@@ -39,4 +40,21 @@ div.self-form div{
     border-width: 0px 1px 1px 1px;
     border-style: solid;
     border-color: #B1D3EC;
+}
+
+.help-block{
+	float: left;
+}
+
+.input,input{
+	width:50% !important;
+	float: left ;
+}
+
+.glyphicon-valida{
+	color: #a94442;
+	vertical-align: middle;
+	margin-left: -18px;
+	float: left;
+	top: 9px;
 }

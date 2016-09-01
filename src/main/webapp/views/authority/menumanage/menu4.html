@@ -14,8 +14,8 @@
     <!-- Bootstrap core CSS -->
     <link href="../../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../resources/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
-    <link href="../../../css/form.css" rel="stylesheet">
     <!-- Custom styles for this template -->
+    <link href="../../../css/form.css" rel="stylesheet">
     <link href="css/menu.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -29,18 +29,93 @@
     <![endif]-->
   </head>
 
-  <body>
-	<div class="self-form" >
-		<h4>菜单管理</h4>
-		<div>
-			<table>
-				<tr>
-					<th>111</th>
-					<td >
-						<input type="text"/>	
-					</td>
-				</tr>
-			</table>
+  <body class="">
+  	<div class="container-fluid" >
+  		<div class="row headerCss">
+  			<h4 class="sub-header">菜单管理</h4>
+  		</div>
+		<div class="row u-form">
+			<div class="tree-menu">
+				<ul id="menuTree" class="ztree"></ul>
+			</div>
+			<div class="iframeDivCss">
+         		<div class="table-responsive self-form tree-memu-info">
+         			<h4>菜单详情</h4>
+         			<div class="table-responsive">
+			            <table class="table table-striped">
+			              <tr>
+			                  <th>所属系统:</th>
+			                  <td >
+			                  	<select class="form-control">
+								  <option>XXXX管理</option>
+								  <option>XXXX前台</option>
+								  <option>XXXX平台</option>
+								</select>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>菜单名称:</th>
+			                  <td >
+			                  	<input type="text" maxlength="20" required/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>菜单状态:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>URL地址:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>排序:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>菜单类型:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>父菜单:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>菜单图标:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>菜单图标类或路径:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+			                  <th>描述信息:</th>
+			                  <td >
+			                  	<input type="text"/>
+			                  </td>
+		                  </tr>
+		                  <tr>
+		                  	<td colspan="2" align="center">
+		                  		<button type="submit" class="btn btn-default">Submit</button>
+		                  	</td>
+		                  </tr>
+			            </table>
+			    	</div>
+         		</div>
+			</div>
 		</div>
 	</div>
     <!-- Placed at the end of the document so the pages load faster -->
