@@ -28,3 +28,6 @@
 	margin-left: auto;
     margin-right: auto;
 }
+.select,select{
+	width:50% !important;
+}

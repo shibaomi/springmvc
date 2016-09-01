@@ -32,7 +32,6 @@ div.self-form div{
     white-space: nowrap;
     text-align: right;
     font-weight: normal;
-<<<<<<< HEAD
     vertical-align: inherit !important;
 }
 
@@ -59,13 +58,3 @@ div.self-form div{
 	float: left;
 	top: 9px;
 }
-=======
-}
-
-.td,td{
-	padding: 5px 15px 5px 5px;
-    border-width: 0px 1px 1px 1px;
-    border-style: solid;
-    border-color: #B1D3EC;
-}
->>>>>>> branch 'master' of https://github.com/shibaomi/springmvc.git
