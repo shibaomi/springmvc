@@ -82,11 +82,13 @@
             validationForm(this)
         });
     };
-
+    
+    var focusFlag=false;
     $.fn.valid=function(object,options,cb){
         if (formState) { // 重复提交则返回
             return false;
         };
+        focusFlag=true;
         $("#validerrmsg").remove();
 
         var myobject;
@@ -129,6 +131,10 @@
                     validationError = true;
                 }
             }
+            if(focusFlag&&validationError){
+        		focusFlag=false;
+        		$(this).focus();
+        	}
         });
 
         wFocus = false;
@@ -352,7 +358,7 @@
         //1.丢失焦点事件
         $(obj).find('input, textarea,select').each(function(){
             var el = $(this);
-            el.on('blur',function(){ // 失去焦点时
+            el.on('input',function(){ // 失去焦点时
                 valid = (el.attr('check-type')==undefined)?null:el.attr('check-type').split(' ');
                 if (valid){
                     validateField(this, valid);
