@@ -5,6 +5,10 @@ import java.util.List;
 
 import lombok.Data;
 
+/**
+ * 系统菜单控制表
+ * @author shibaomi
+ */
 public @Data class MenuModel {
 	//无意义主键
 	private String id;

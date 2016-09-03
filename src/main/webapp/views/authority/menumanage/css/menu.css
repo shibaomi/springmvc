@@ -27,3 +27,11 @@
 .tree-memu-info{
     margin-right: auto;
 }
+/**搜索图标位置css**/
+.parent-tree-menu-select{
+	padding: 10px;
+}
+/**搜索显示菜单树css**/
+.selectMenu {
+    width:400px;
+}

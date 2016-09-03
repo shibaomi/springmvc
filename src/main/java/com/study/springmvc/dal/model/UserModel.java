@@ -4,6 +4,10 @@ import java.sql.Timestamp;
 
 import lombok.Data;
 
+/***
+ * 用户信息表
+ * @author shibaomi
+ */
 public @Data class UserModel {
 	// 无意义主键
 	private Long id;

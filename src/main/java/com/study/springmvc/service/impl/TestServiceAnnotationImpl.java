@@ -44,8 +44,8 @@ public class TestServiceAnnotationImpl implements TestServiceAnnotation{
 			throw new SQLException("test");
 		}
 		DictModel saveDictModel=new DictModel();
-		saveDictModel.setCode(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
-		saveDictModel.setValue(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+//		saveDictModel.setCode(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
+//		saveDictModel.setValue(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		dictDao.saveDictModel(saveDictModel);
 	}
 

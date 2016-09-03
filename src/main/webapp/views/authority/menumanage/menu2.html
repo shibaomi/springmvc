@@ -57,8 +57,8 @@
 			                  <tr class="form-group">
 				                  <th>菜单名称:</th>
 				                  <td>
-				                  	<input type="text" class="form-control" id="dddd"
-					                  	check-type="mobile" required-message="请填写菜单名称"/>
+				                  	<input type="text" class="form-control"
+					                  	check-type="required" required-message="请填写菜单名称"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
@@ -97,10 +97,8 @@
 			                  <tr class="form-group">
 				                  <th>父菜单:</th>
 				                  <td >
-				                  	<input id="parentMenuDiv" type="text"class="form-control" readonly="readonly" parentId=""
-				                  		data-target="#selectTreeMenuDIv" data-toggle="modal"/>
-				                  	<span class="glyphicon glyphicon-search text-center parent-tree-menu-select" 
-				                  		data-target="#selectTreeMenuDIv data-toggle="modal"></span>
+				                  	<input type="text"class="form-control" 
+				                  		check-type="required" required-message="请填写你的大名ss。"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
@@ -129,7 +127,7 @@
 			                  	<td colspan="2" align="center">
 			                  		<button type="button" class="btn btn-primary btn-lg ff" onclick="savaOrUpdateMenu();">保存</button>
 			                  		<button type="reset" class="btn btn-warning btn-lg ff">重置</button>
-			                  		<button type="button" class="btn btn-primary btn-lg ff" onclick="test();">test</button>
+			                  		<button type="button" href="menu3.html"  data-target="#myModal" data-toggle="modal" class="btn btn-warning btn-lg ff">test</button>
 			                  	</td>
 			                  </tr>
 				            </table>
@@ -139,31 +137,27 @@
 			</div>
 		</div>
 	</div>
-	
 	<!-- 弹出层嵌入页面或者代码 -->
-	<div class="modal fade"  id="selectTreeMenuDIv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
-	    <div class="modal-dialog selectMenu"> 
-	        <div class="modal-content ">
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> 
+	    <div class="modal-dialog"> 
+	        <div class="modal-content">
 	        	<!-- 插入其他弹出页面层 或者直接按照下面的样式填写弹出层--> 
-	        	<div class="modal-header"> 
-	        		<h4 class="modal-title">父菜单列表选择</h4> 
-	        	</div> 
-	        	<div class="modal-body">
-	        		<div class="selectMenuTree">
-						<ul id="menuTree1" class="ztree"></ul>
-					</div>
-	        	</div> 
-	        	<div class="modal-footer"> 
-	                <button type="button" class="btn btn-primary" onclick="selectOkBtn();">确认</button> 
-	                <button type="button" class="btn btn-warning" data-dismiss="modal">取消</button> 
-	            </div>
+	        	<!-- <div class="modal-header"> 
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> 
+	                <h4 class="modal-title" id="myModalLabel">模态框（Modal）标题</h4> 
+	            </div> 
+	            <div class="modal-body">在这里添加一些文本</div> 
+	            <div class="modal-footer"> 
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button> 
+	                <button type="button" class="btn btn-primary">提交更改</button> 
+	            </div>  -->
 	        </div><!-- /.modal-content --> 
 	    </div><!-- /.modal --> 
 	</div>
-	
+
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="../../../resources/jquery/jquery.min.js"></script>
-	<script type="text/javascript" src="../../../resources/bootstrap/js/bootstrap.js"></script>
+	<script type="text/javascript" src="../../../resources/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../../../resources/validaplugin/bootstrap3-validation.js"></script>
 	<script type="text/javascript" src="../../../resources/ztree/js/jquery.ztree.core.js"></script>
 	
