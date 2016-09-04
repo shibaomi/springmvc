@@ -8,9 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../resources/favicon.ico">
-
     <title>菜单管理</title>
-
     <!-- Bootstrap core CSS -->
     <link href="../../../resources/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../../resources/ztree/css/zTreeStyle/zTreeStyle.css" type="text/css">
@@ -47,7 +45,7 @@
 				              <tr>
 				                  <th>所属系统:</th>
 				                  <td >
-				                  	<select class="form-control">
+				                  	<select class="form-control" id="ownSystemSelectDiv">
 									  <option>XXXX管理</option>
 									  <option>XXXX前台</option>
 									  <option>XXXX平台</option>
@@ -57,41 +55,41 @@
 			                  <tr class="form-group">
 				                  <th>菜单名称:</th>
 				                  <td>
-				                  	<input type="text" class="form-control" id="dddd"
-					                  	check-type="mobile" required-message="请填写菜单名称"/>
+				                  	<input type="text" class="form-control" id="menuNameDiv"
+					                  	check-type="required" required-message="请填写菜单名称"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>菜单状态:</th>
 				                  <td >
-				                  	<select class="form-control">
-									  <option>启用</option>
-									  <option>停止使用</option>
-									  <option>删除</option>
+				                  	<select class="form-control" id="menuStsSelectDiv">
+									  <option value="0">启用</option>
+									  <option value="2">停止使用</option>
+									  <option value="1">删除</option>
+									</select>
+				                  </td>
+			                  </tr>
+			                  <tr class="form-group">
+				                  <th>菜单类型:</th>
+				                  <td >
+				                  	<select class="form-control" id="menuTypeSelectDiv">
+									  <option value="0">相对路径</option>
+									  <option value="1">绝对路径</option>
 									</select>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>URL地址:</th>
 				                  <td >
-				                  	<input type="text" class="form-control"
-				                  		check-type="required" required-message="请填写URL地址"/>
+				                  	<input type="text" class="form-control" id="menuUrlDiv"
+				                  		check-type="url" required-message="请填写URL地址"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>排序:</th>
 				                  <td >
-				                  	<input type="text" class="form-control"
-				                  		check-type="required" required-message="请填写菜单排序"/>
-				                  </td>
-			                  </tr>
-			                  <tr class="form-group">
-				                  <th>菜单类型:</th>
-				                  <td >
-				                  	<select class="form-control">
-									  <option>相对路径</option>
-									  <option>绝对路径</option>
-									</select>
+				                  	<input type="text" class="form-control" id="menuOrderDiv"
+				                  		check-type="number" required-message="请填写正确的菜单排序"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
@@ -100,36 +98,39 @@
 				                  	<input id="parentMenuDiv" type="text"class="form-control" readonly="readonly" parentId=""
 				                  		data-target="#selectTreeMenuDIv" data-toggle="modal"/>
 				                  	<span class="glyphicon glyphicon-search text-center parent-tree-menu-select" 
-				                  		data-target="#selectTreeMenuDIv data-toggle="modal"></span>
+				                  		data-target="#selectTreeMenuDIv" data-toggle="modal"></span>
+				                  	<button id="clearParentMenuBtn" type="button" class="btn btn-default" onclick="clearSelectparentMenu()">清空</button>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>菜单图标类型:</th>
 				                  <td >
-				                  	<select class="form-control">
-									  <option>相对路径</option>
-									  <option>绝对路径</option>
+				                  	<select class="form-control" id="menuIcoTypeSelectDiv">
+									  <option value="0">图标</option>
+									  <option value="1">bootstrap class</option>
+									  <option value="9">无</option>
 									</select>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>菜单图标类或路径:</th>
 				                  <td >
-				                  	<input type="text" class="form-control"
+				                  	<input type="text" class="form-control" id="menuIcoMsgDiv"
 				                  		check-type="required" required-message="菜单图标类或路径"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>描述信息:</th>
 				                  <td >
-				                  	<input type="text" class="form-control"/>
+				                  	<input type="text" class="form-control" id="menuDescDiv"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 			                  	<td colspan="2" align="center">
-			                  		<button type="button" class="btn btn-primary btn-lg ff" onclick="savaOrUpdateMenu();">保存</button>
-			                  		<button type="reset" class="btn btn-warning btn-lg ff">重置</button>
-			                  		<button type="button" class="btn btn-primary btn-lg ff" onclick="test();">test</button>
+			                  		<button id="createBtn" type="reset" class="btn btn-primary btn-lg hide" onclick="createBtnFunc();">新增</button>
+			                  		<button id="updateBtn" type="button" class="btn btn-primary btn-lg hide" onclick="updateBtnFunc();">修改</button>
+			                  		<button id="saveBtn" type="button" class="btn btn-primary btn-lg" onclick="savaOrUpdateMenu();">保存</button>
+			                  		<button id="resetBtn" type="reset" class="btn btn-warning btn-lg" onclick="formReset()">重置</button>
 			                  	</td>
 			                  </tr>
 				            </table>
@@ -150,7 +151,7 @@
 	        	</div> 
 	        	<div class="modal-body">
 	        		<div class="selectMenuTree">
-						<ul id="menuTree1" class="ztree"></ul>
+						<ul id="parentMenuTree" class="ztree"></ul>
 					</div>
 	        	</div> 
 	        	<div class="modal-footer"> 
@@ -170,7 +171,6 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../../resources/assets/js/ie10-viewport-bug-workaround.js"></script>
     <script type="text/javascript" src="../../../views/common/common.js"></script>
-	<script type="text/javascript" src="../../../views/common/requestAjax.js"></script>
 	<script type="text/javascript" src="js/menu.js"></script>
   </body>
 </html>
