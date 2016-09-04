@@ -180,3 +180,11 @@ function showMenuInfo(treeNode){
 	//述信息
 	$("#menuDescDiv").val(treeNode.menuDesc);
 }
+
+function savaOrUpdateMenu(){
+	if($("form").valid(this,"error!")==false){
+		return;
+	}
+	console.log(123)
+	
+}

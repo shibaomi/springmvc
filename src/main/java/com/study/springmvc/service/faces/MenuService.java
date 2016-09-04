@@ -7,7 +7,7 @@ import com.study.springmvc.dal.model.MenuModel;
 
 public interface MenuService {
 	
-public List<MenuModel> queryListMenuModel(Map<String,Object> map);
+	public List<MenuModel> queryListMenuModel(Map<String,Object> map);
 	
 	public int addDictModel(MenuModel menu);
 	
