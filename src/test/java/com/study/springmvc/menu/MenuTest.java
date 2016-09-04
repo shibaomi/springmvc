@@ -30,12 +30,11 @@ public class MenuTest extends BaseTest{
 	public void testBat() {
 		
 		try {
-			//List<MenuModel> l=menuService.queryListMenuModel(null);
-			//System.out.println(l.size());
+			List<MenuModel> l=menuService.queryListMenuModel(null);
+			System.out.println(l.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		assertTrue("test", true);
 	}
 
 }
