@@ -17,7 +17,7 @@ var setting = {
 	}
 };
 $(document).ready(function(){
-	$("form").validation({icon:true});	   
+	 $("#menuForm").validate();
 	//设置bootstrap弹出框属性--树菜单选择弹出框
 	$('#selectTreeMenuDIv').modal({
 		backdrop:'static',
@@ -193,7 +193,7 @@ function showMenuInfo(treeNode){
 }
 
 function savaOrUpdateMenu(){
-	if($("form").valid(this,"error!")==false){
+	if(!$("#menuForm").valid()){
 		return;
 	}
 	var obj={};

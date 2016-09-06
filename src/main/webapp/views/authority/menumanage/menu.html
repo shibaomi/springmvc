@@ -40,7 +40,7 @@
          		<div class="table-responsive self-form tree-memu-info">
          			<h4>菜单详情</h4>
          			<div class="table-responsive">
-         				<form id="form" >
+         				<form id="menuForm" >
 				            <table class="table table-striped">
 				              <tr>
 				                  <th>所属系统:</th>
@@ -53,8 +53,7 @@
 			                  <tr class="form-group">
 				                  <th>菜单名称:</th>
 				                  <td>
-				                  	<input type="text" class="form-control" id="menuNameDiv"
-					                  	check-type="required" required-message="请填写菜单名称"/>
+				                  	<input type="text" class="form-control" id="menuNameDiv" required/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
@@ -79,8 +78,7 @@
 			                  <tr class="form-group">
 				                  <th>URL地址:</th>
 				                  <td >
-				                  	<input type="text" class="form-control" id="menuUrlDiv"
-				                  		check-type="url" required-message="请填写URL地址"/>
+				                  	<input type="url" class="form-control" id="menuUrlDiv" required/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
@@ -162,7 +160,8 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="../../../resources/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="../../../resources/bootstrap/js/bootstrap.js"></script>
-	<script type="text/javascript" src="../../../resources/validaplugin/bootstrap3-validation.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery/jquery-validation-1.15.0/jquery.validate.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery/jquery-validation-1.15.0/localization/messages_zh.js"></script>
 	<script type="text/javascript" src="../../../resources/ztree/js/jquery.ztree.core.js"></script>
 	
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
