@@ -12,4 +12,10 @@ public interface MenuDao {
 	
 	public int updateMenuModel(MenuModel menu);
 	
+	/**
+	 * 通过id查菜单详情
+	 * @param Id
+	 */
+	public MenuModel queryMenuModelById(String Id);
+	
 }

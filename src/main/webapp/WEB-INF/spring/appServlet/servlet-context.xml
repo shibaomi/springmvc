@@ -24,6 +24,7 @@
     <resources mapping="/*.html" location="/" />
     <resources mapping="/css/**" location="/css/" />
     <resources mapping="/*.js" location="/" />
+    <resources mapping="/example/**" location="/example/"></resources>
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<!-- 将handler method返回的modelAndView基础上，加上目录前缀/WEB-INF/jsp/和文件名称后缀.jsp。

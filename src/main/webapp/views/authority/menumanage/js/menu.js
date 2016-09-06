@@ -24,6 +24,7 @@ $(document).ready(function(){
 		show:false		
 	});
 	queryMenu();
+	selectMenuIcoFunc();
 });
 //查询菜单标签
 function queryMenu(){
@@ -33,16 +34,25 @@ function queryMenu(){
 }
 //查询菜单成功回调函数
 function queryMenuSucc(data){
-	setting.callback={
-		onClick:clickTreeMenu,//选择树点击函数
-		onDblClick: dbClickTreeMenu//双击树节点选择菜单
-	};
-	$.fn.zTree.init($("#menuTree"), setting, data.childMenu);
-	setting.callback={
-		onClick:clickSelectTreeMenu,//选择树点击函数
-		onDblClick: dbClickSelectTreeMenu//双击树节点选择菜单
-	};
-	$.fn.zTree.init($("#parentMenuTree"), setting, data.childMenu);
+	if(isEmpty(data)){
+		alertMsg("未查到任何系统的菜单信息",{okBtn:true});
+		return;
+	}
+	var str="";
+	for(var item in data){
+		setting.callback={
+			onClick:clickTreeMenu,//选择树点击函数
+			onDblClick: dbClickTreeMenu//双击树节点选择菜单
+		};
+		$.fn.zTree.init($("#menuTree"), setting, data[item].childMenu);
+		setting.callback={
+			onClick:clickSelectTreeMenu,//选择树点击函数
+			onDblClick: dbClickSelectTreeMenu//双击树节点选择菜单
+		};
+		$.fn.zTree.init($("#parentMenuTree"), setting, data[item].childMenu);
+		str+='<option value="'+item+'">'+item+'</option>';
+	}
+	$("#ownSystemSelectDiv").html(str);
 }
 //单机树节点
 function clickSelectTreeMenu(event, treeId, treeNode) {
@@ -179,12 +189,28 @@ function showMenuInfo(treeNode){
 	$("#menuIcoMsgDiv").val(treeNode.icoMsg);
 	//述信息
 	$("#menuDescDiv").val(treeNode.menuDesc);
+	selectMenuIcoFunc();
 }
 
 function savaOrUpdateMenu(){
 	if($("form").valid(this,"error!")==false){
 		return;
 	}
-	console.log(123)
-	
+	var obj={};
+	var url="/springmvc/authority/menu/queryList";
+	simplePostAjax(obj, url, queryMenuSucc);
+
+}
+
+//设置图标描述信息可编辑状态，若无图标信息则菜单图标路径不可编辑，否则可编辑
+function selectMenuIcoFunc(){
+	if($("#menuIcoTypeSelectDiv").val()=="9"){
+		$("#menuIcoMsgDiv").attr("readonly","readonly");
+		$("#menuIcoMsgDiv").removeAttr("check-type");
+		$("#menuIcoMsgDiv").removeAttr("required-message");
+	}else{
+		$("#menuIcoMsgDiv").removeAttr("readonly");
+		$("#menuIcoMsgDiv").attr("check-type","required");
+		$("#menuIcoMsgDiv").attr("required-message","菜单图标类或路径");
+	}
 }

@@ -46,9 +46,7 @@
 				                  <th>所属系统:</th>
 				                  <td >
 				                  	<select class="form-control" id="ownSystemSelectDiv">
-									  <option>XXXX管理</option>
-									  <option>XXXX前台</option>
-									  <option>XXXX平台</option>
+				                  		<!-- 系统信息显示 -->
 									</select>
 				                  </td>
 			                  </tr>
@@ -105,18 +103,17 @@
 			                  <tr class="form-group">
 				                  <th>菜单图标类型:</th>
 				                  <td >
-				                  	<select class="form-control" id="menuIcoTypeSelectDiv">
+				                  	<select class="form-control" id="menuIcoTypeSelectDiv" onchange="selectMenuIcoFunc();">
+									  <option value="9">无</option>
 									  <option value="0">图标</option>
 									  <option value="1">bootstrap class</option>
-									  <option value="9">无</option>
 									</select>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">
 				                  <th>菜单图标类或路径:</th>
 				                  <td >
-				                  	<input type="text" class="form-control" id="menuIcoMsgDiv"
-				                  		check-type="required" required-message="菜单图标类或路径"/>
+				                  	<input  type="text" class="form-control" id="menuIcoMsgDiv"/>
 				                  </td>
 			                  </tr>
 			                  <tr class="form-group">

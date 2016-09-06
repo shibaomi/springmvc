@@ -31,4 +31,9 @@ public class MenuDaoImpl implements MenuDao {
 		return baseDao.update("MenuModelMapper.updateMenu", menu);
 	}
 
+	@Override
+	public MenuModel queryMenuModelById(String Id) {
+		return baseDao.selectOne("MenuModelMapper.selectByKey", Id);
+	}
+
 }

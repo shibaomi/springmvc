@@ -10,6 +10,8 @@ import lombok.Data;
  * @author shibaomi
  */
 public @Data class SysInfo {
+	//系统Id
+	private String id;
 	//系统名称
 	private String systemName;
 	//系统描述
