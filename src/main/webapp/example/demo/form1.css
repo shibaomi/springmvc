@@ -1,0 +1,51 @@
+.self-form form.form-horizontal div.form-group{
+    margin: 0px;
+    padding: 6px;
+    background-color: #FFF;
+    border-top: 1px solid #B1D3EC;
+    border-left: 1px solid #B1D3EC;
+    min-height:48px;
+}
+
+form.form-horizontal div.form-group{
+    margin: 0px;
+}
+
+.help-block{
+	margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+.self-form{
+	margin: 5px 5px 5px 5px;
+    background-color: #EBF4FA;
+    border: 1px solid #B1D3EC;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 15px;
+}
+
+.h4,h4{
+	margin-left: 10px;
+}
+
+.self-form div.row{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #B1D3EC;
+    background-color: #FFFFFF;
+}
+
+.self-form div.row .panel {
+    margin-bottom: 0px;
+}
+
+.bottomAndRightCss{
+	border-right: 1px solid #B1D3EC;
+    border-bottom: 1px solid #B1D3EC;
+}
+
+.ff{
+	height:100%;
+	border-right: 1px solid #B1D3EC;
+}
