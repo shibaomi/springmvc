@@ -2,55 +2,91 @@
 	margin: 5px 5px 5px 5px;
     background-color: #EBF4FA;
     border: 1px solid #B1D3EC;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
 }
+.self-form div.row{
+    border-width: 1px;
+    border-style: solid;
+    border-color: #B1D3EC;
+    background-color: #FFFFFF;
+}
+.self-form form.form-horizontal div.form-group{
+	margin: 0px;
+}
+
+@media (min-width: 1200px) {
+  .self-form form.form-horizontal div.form-group{
+	margin: 0px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+	padding-right: 0px;
+	padding-left: 0px;
+  }
+}
+
+.self-form div.row .panel {
+    margin-bottom: 0px;
+}
+
+.help-block{
+	margin-top: 5px;
+    margin-bottom: 0px;
+}
+
 .h4,h4{
 	margin-left: 10px;
 }
 
-div.self-form div{
-    margin: 0px 10px 10px 10px;
-    padding: 5px;
-    background-color: #FFF;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #B1D3EC;
+.label-bg{
+	background-color: #EBF4FA !important;
+}
+.form-btn{
+	margin-bottom: 10px;
+	margin-top: 10px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
-.table,table{
-	margin-bottom: 0px;
+.panel-body {
+    padding: 10px;
 }
 
-.th,th{
-    padding: 5px !important;
-    background-color: #EBF4FA;
-    border-width: 1px 1px 1px 1px;
-    border-style: solid;
-    border-color: #FFF #B1D3EC #B1D3EC #B1D3EC;
-    white-space: nowrap;
-    text-align: right;
-    font-weight: normal;
-    vertical-align: inherit !important;
+.form_border {
+   	padding-top: 6px;
+	padding-bottom: 6px;
+	background-color: #F9F9F9;
+	border: 1px solid #B1D3EC;
 }
 
-.td,td{
-	padding: 5px 15px 5px 5px !important;
-    border-width: 0px 1px 1px 1px;
-    border-style: solid;
-    border-color: #B1D3EC;
-    position: relative !important;
+.row-eq-height-second{
+	margin: 0px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+	padding-left: 0px;
+	padding-right: 0px;
 }
-
-.has-success .glyphicon-valida {
-  color: #3c763d;
+.control-label{
+	float: right;
 }
-
-.select,select{
-	width:50% !important;
+.row-eq-height-first{
+	margin: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
 }
-.button,button{
-	margin-left: 20px;
-	margin-right: 20px;
-	width: 120px;
+@media (min-width: 768px) {
+  .row-eq-height-first{
+	margin: 0px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display:         flex;
+	padding-left: 0px;
+	padding-right: 0px;
+}
 }
