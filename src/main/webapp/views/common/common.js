@@ -220,7 +220,7 @@ function TableFormValidate(formId){
 		errorElement: "em",
 		errorPlacement: function ( error, element ) {
 			error.addClass( "help-block" );
-			element.parents( ".col-xs-4" ).addClass( "has-feedback" );
+			element.parents( ".col-xs-8" ).addClass( "has-feedback" );
 			if ( element.prop( "type" ) === "checkbox" ) {
 				error.insertAfter( element.parent( "label" ) );
 			} else {
@@ -236,11 +236,11 @@ function TableFormValidate(formId){
 			}
 		},
 		highlight: function ( element, errorClass, validClass ) {
-			$( element ).parents( ".col-xs-4" ).addClass( "has-error" ).removeClass( "has-success" );
+			$( element ).parents( ".col-xs-8" ).addClass( "has-error" ).removeClass( "has-success" );
 			$( element ).next( "span" ).addClass( "glyphicon-remove" ).removeClass( "glyphicon-ok" );
 		},
 		unhighlight: function ( element, errorClass, validClass ) {
-			$( element ).parents( ".col-xs-4" ).addClass( "has-success" ).removeClass( "has-error" );
+			$( element ).parents( ".col-xs-8" ).addClass( "has-success" ).removeClass( "has-error" );
 			$( element ).next( "span" ).addClass( "glyphicon-ok" ).removeClass( "glyphicon-remove" );
 		}
 	} );
