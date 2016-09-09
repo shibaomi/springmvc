@@ -88,5 +88,10 @@
 	display:         flex;
 	padding-left: 0px;
 	padding-right: 0px;
+  }
 }
+.button,button{
+	width:120px;
+	margin-left: 10px;
+	margin-right: 10px;
 }
