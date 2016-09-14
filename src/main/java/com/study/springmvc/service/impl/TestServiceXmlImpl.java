@@ -33,13 +33,13 @@ public class TestServiceXmlImpl implements TestServiceXml{
 		saveUser.setUserNo(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 //		saveUser.setName(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 		userDao.saveUserModel(saveUser);
-		List<DictModel> dictList=dictDao.queryListDictModel();
-		if(dictList!=null&&!dictList.isEmpty()){
-			System.out.println(dictList.get(0));
-		}
-		if(dictList.size()>0){
-			throw new Exception("test");
-		}
+//		List<DictModel> dictList=dictDao.queryListDictModel();
+//		if(dictList!=null&&!dictList.isEmpty()){
+//			System.out.println(dictList.get(0));
+//		}
+//		if(dictList.size()>0){
+//			throw new Exception("test");
+//		}
 		DictModel saveDictModel=new DictModel();
 //		saveDictModel.setCode(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));
 //		saveDictModel.setValue(DateFormatUtils.format(new Date(), "yyyyMMddHHmmss"));

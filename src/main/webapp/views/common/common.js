@@ -1,6 +1,6 @@
 var timeout=600000;//超时时间毫秒
 //Post方式Ajax方法
-function simplePostAjax(data,url,succCb){
+function simplePostAjax(data,url,succCb,errCb){
 	$.ajax({
 		type:"POST",//请求类型，"POST" 或 "GET
 		cache:false,//默认: true,dataType为script和jsonp时默认为false，设置为 false 将不缓存此页面
@@ -13,17 +13,23 @@ function simplePostAjax(data,url,succCb){
 		success:function (data, textStatus, jqXHR){
 			if(succCb){
 				succCb(data, textStatus, jqXHR);
+			}else{
+				console.log("ajax post请求成功：data="+JSON.stringify(data));
 			}
 		},
 		//请求失败时调用此函数。有以下三个参数：XMLHttpRequest 对象、错误信息、（可选）捕获的异常对象。
 		//如果发生了错误，错误信息（第二个参数）除了得到null之外，还可能是"timeout", "error", "notmodified" 和 "parsererror"
 		error:function (XMLHttpRequest, textStatus, errorThrown) {
-			if(textStatus=="timeout"){
-				alert("超时");
-			}else if(textStatus=="parsererror"){
-				alert("解析错误");
-			}else {
-				alert("fail:"+textStatus);
+			if(errCb){
+				errCb(textStatus, errorThrown,XMLHttpRequest)
+			}else{
+				if(textStatus=="timeout"){
+					alert("超时");
+				}else if(textStatus=="parsererror"){
+					alert("解析错误");
+				}else {
+					alert("fail:"+textStatus);
+				}
 			}
 		},
 		statusCode: {
@@ -38,7 +44,7 @@ function simplePostAjax(data,url,succCb){
 }
 
 //get方式Ajax方法
-function simpleGetAjax(data,url,succCb){
+function simpleGetAjax(data,url,succCb,errCb){
 	$.ajax({
 		type:"GET",//请求类型，"POST" 或 "GET
 		cache:false,//默认: true,dataType为script和jsonp时默认为false，设置为 false 将不缓存此页面
@@ -51,17 +57,23 @@ function simpleGetAjax(data,url,succCb){
 		success:function (data, textStatus, jqXHR){
 			if(succCb){
 				succCb(data, textStatus, jqXHR);
+			}else{
+				console.log("ajax get请求成功：data="+JSON.stringify(data));
 			}
 		},
 		//请求失败时调用此函数。有以下三个参数：XMLHttpRequest 对象、错误信息、（可选）捕获的异常对象。
 		//如果发生了错误，错误信息（第二个参数）除了得到null之外，还可能是"timeout", "error", "notmodified" 和 "parsererror"
 		error:function (XMLHttpRequest, textStatus, errorThrown) {
-			if(textStatus=="timeout"){
-				alert("超时");
-			}else if(textStatus=="parsererror"){
-				alert("解析错误");
-			}else {
-				alert("fail:"+textStatus);
+			if(errCb){
+				errCb(textStatus, errorThrown,XMLHttpRequest)
+			}else{
+				if(textStatus=="timeout"){
+					alert("超时");
+				}else if(textStatus=="parsererror"){
+					alert("解析错误");
+				}else {
+					alert("fail:"+textStatus);
+				}
 			}
 		},
 		statusCode: {
@@ -238,3 +250,11 @@ function TableFormValidate(formId){
 	} );
 }
 
+//格式化请求数据，若返回的数据为undefined或者null，则返回""
+function formatUndefinedOrNullData(data){
+	if(data==null||data==undefined){
+		return "";
+	}else{
+		return data;
+	}
+}

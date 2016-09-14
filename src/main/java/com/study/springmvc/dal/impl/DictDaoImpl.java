@@ -1,7 +1,5 @@
 package com.study.springmvc.dal.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,18 +19,6 @@ public class DictDaoImpl implements DictDao {
 	@Autowired
 	private BaseDao_Mybatis baseDao;
 
-	public List<DictModel> queryListDictModel() {
-		Map<String,Object> paramt=new HashMap<String,Object>();
-		List<String>codeList=new ArrayList<String>();
-		codeList.add("1");
-		codeList.add("20160101170224");
-		paramt.put("codeList", codeList);
-//		paramt.put("code", "1");
-//		paramt.put("value", "20160101170224");
-		List<DictModel> dictList = baseDao.selectList("DictModelMapper.selectList",paramt);
-		return dictList;
-	}
-
 	public int saveDictModel(DictModel dict) {
 		return baseDao.insert("DictModelMapper.insertDict", dict);
 	}
@@ -42,9 +28,13 @@ public class DictDaoImpl implements DictDao {
 	}
 
 	public Page<DictModel> queryPageDictModel(QueryCondition query) {
-		Page<DictModel> page=this.baseDao.selectPageList("DictModelMapper.selectPage", query);
-		System.out.println(query); 
-	    System.out.println(page); 
+		Page<DictModel> page=this.baseDao.selectPageList("DictModelMapper.selectList", query);
+		return page;
+	}
+
+	@Override
+	public List<DictModel> queryListDictModel(Map<String, Object> map) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

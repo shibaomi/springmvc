@@ -60,6 +60,8 @@
 	padding-bottom: 6px;
 	background-color: #F9F9F9;
 	border: 1px solid #B1D3EC;
+	border-spacing: 0;
+	border-collapse: collapse;
 }
 
 .row-eq-height-second{
@@ -94,4 +96,54 @@
 	width:120px;
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+.tableForm{
+	margin: 5px 5px 5px 5px;
+    background-color: #EBF4FA;
+    border: 1px solid #B1D3EC;
+}
+.table,talbe{
+	margin-bottom:0px;
+}
+table thead tr th{
+	/***顶部菜单设置，渐变背景颜色设置,以下background主要是适用不同浏览器的**/
+	background: #EBF4FA;
+    background: -moz-linear-gradient(top,  #EBF4FA 0%, #D7E8F5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EBF4FA), color-stop(100%,#D7E8F5));
+    background: -webkit-linear-gradient(top,#EBF4FA 0,#D7E8F5 100%);
+    background: -o-linear-gradient(top,  #EBF4FA 0%,#D7E8F5 100%);
+    background: -ms-linear-gradient(top,  #EBF4FA 0%,#D7E8F5 100%);
+    background: linear-gradient(to bottom,  #EBF4FA 0%,#D7E8F5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBF4FA', endColorstr='#D7E8F5',GradientType=0 );
+	border: 1px solid #B1D3EC !important;
+	text-align: center;
+}
+
+table tbody tr td{
+	border: 1px solid #B1D3EC !important;
+	text-align: center;
+	background: #FFFFFF;
+}
+
+table tfoot tr td{
+	/***顶部菜单设置，渐变背景颜色设置,以下background主要是适用不同浏览器的**/
+	background: #EBF4FA;
+    background: -moz-linear-gradient(top,  #EBF4FA 0%, #D7E8F5 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#EBF4FA), color-stop(100%,#D7E8F5));
+    background: -webkit-linear-gradient(top,#EBF4FA 0,#D7E8F5 100%);
+    background: -o-linear-gradient(top,  #EBF4FA 0%,#D7E8F5 100%);
+    background: -ms-linear-gradient(top,  #EBF4FA 0%,#D7E8F5 100%);
+    background: linear-gradient(to bottom,  #EBF4FA 0%,#D7E8F5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#EBF4FA', endColorstr='#D7E8F5',GradientType=0 );
+	border: 1px solid #B1D3EC !important;
+	text-align: center;
+	padding-top:5px !important;
+	padding-bottom:0px !important;
+	margin: 0px !important;
+}
+
+.pageMarinAndPadding{
+	margin: 0px;
+	padding:0px;
 }

@@ -30,5 +30,6 @@
 		<mapper resource="sqlMapper-mybatis/ModelMapper.xml" />
 		<mapper resource="sqlMapper-mybatis/UserMapper.xml"/>
 		<mapper resource="sqlMapper-mybatis/MenuMapper.xml"/>
+		<mapper resource="sqlMapper-mybatis/DictMapper.xml"/>
 	</mappers>
 </configuration>

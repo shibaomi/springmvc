@@ -28,22 +28,22 @@ public @Data class Page<T> implements Serializable{
     /**
 	 * 当前页数，从1开始
 	 */
-    private int curPage = 1;
+    private int currPage = 1;
     
     /**
      * 上一页
      */
-    private int previousPageIndex;
+    private int prePage;
     
     /**
      * 下一页
      */
-    private int nextPageIndex;
+    private int nextPage;
     
     /**
      * 总后一页
      */
-    private int lastPageIndex;
+    private int lastPage;
     /**
 	 * 排序字段
 	 */
@@ -73,7 +73,7 @@ public @Data class Page<T> implements Serializable{
 	public Page(int totalCount, int pageSize, int currentPage) {
 		this.setPageSize(pageSize);
 		this.setTotalCount(totalCount);
-		this.setCurPage(currentPage);
+		this.setCurrPage(currentPage);
 		setPageInfo();
 	}
 	
@@ -83,23 +83,23 @@ public @Data class Page<T> implements Serializable{
 		if(this.totalCount%this.pageSize!=0){
 			this.totalPage+=1;
 		}
-		this.lastPageIndex=this.totalPage;
+		this.lastPage=this.totalPage;
 		//当前页数大于最后页数，取总后一页
-		if(this.curPage>this.lastPageIndex){
-			this.curPage=this.lastPageIndex;
+		if(this.currPage>this.lastPage){
+			this.currPage=this.lastPage;
 		}
 		//上一页
-		this.previousPageIndex=this.curPage-1;
-		if(this.previousPageIndex<1){
-			this.previousPageIndex=this.curPage;
+		this.prePage=this.currPage-1;
+		if(this.prePage<1){
+			this.prePage=this.currPage;
 		}
 		//下一页
-		this.nextPageIndex=this.curPage+1;
-		if(this.nextPageIndex>this.lastPageIndex){
-			this.nextPageIndex=this.lastPageIndex;
+		this.nextPage=this.currPage+1;
+		if(this.nextPage>this.lastPage){
+			this.nextPage=this.lastPage;
 		}
 		//开始计算数
-		this.startIndex=(this.curPage-1)*this.pageSize+1;
+		this.startIndex=(this.currPage-1)*this.pageSize+1;
 	}
 	public void setPageSize(int pageSize) {
 		if(pageSize<0){

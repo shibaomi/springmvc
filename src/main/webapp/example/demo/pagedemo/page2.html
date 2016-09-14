@@ -74,32 +74,67 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="form-btn text-center">
+						<div class="form-group form_border">
+							<div class="form-btn text-center ">
 								<button type="button" class="btn btn-primary btn-lg" name="queryBtn" onclick="queryList();">查询</button>
 								<button type="reset" class="btn btn-primary btn-lg">清空选择</button>
 							</div>
+						</div>
+						<div>
+							<input type="checkbox" name="newsletter" checked="checked" value="Daily" />
+  <input type="checkbox" name="newsletter" value="Weekly" />
+  <input type="checkbox" name="newsletter" checked="checked" value="Monthly" />
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-		<!-- 分页插件 -->
-		<div class="row">
-			<div class="table-responsive">
-				<table id="dictPageTable" class="table table-striped">
-					<thead>
-						<tr>
-							<th field="dictCode">dictCode</th>
-							<th field="dictName">dictName</th>
-							<th field="dictDesc">dictDesc</th>
-							<th field="dictState">dictState</th>
-							<th field="dictOpertState">dictOpertState</th>
-							<th field="dictType">dictType</th>
-						</tr>
-					</thead>
-				</table>
-			</div>
+	</div>
+	<!-- 分页插件 -->
+	<div class="row tableForm">
+		<div class="table-responsive">
+			<table class="table table-bordered" id="dictTableList">
+				<thead>
+					<tr>
+						<th field="radio"><input type="radio"/>选择</th>
+						<th field="checkbox"><input type="checkbox"/>选择</th>
+						<th field="dictCode">dictCode</th>
+						<th field="dictName">dictName</th>
+						<th field="dictDesc">dictDesc</th>
+						<th field="dictState">dictState</th>
+						<th field="dictOpertState">dictOpertState</th>
+						<th field="dictType">dictType</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="6"><nav>
+								<ul class="pagination pageMarinAndPadding">
+									<li><a>共398条 第2/40页 20条/页</a></li>
+									<li style="cursor: pointer;" id="firstPageBarBtn"><a>首页</a></li>
+									<li style="cursor: pointer;" id="firstPageBarBtn"><a>上一页</a></li>
+									<li style="cursor: pointer;" id="firstPageBarBtn"><a>下一页</a></li>
+									<!-- <li style="cursor: pointer;" id="preBarBtn" class="disabled"><a>«</a></li>
+									<li class=" active  pageNum" style="cursor: pointer;"><a>1</a></li>
+									<li class=" pageNum" style="cursor: pointer;"><a>2</a></li>
+									<li class=" pageNum" style="cursor: pointer;"><a>3</a></li>
+									<li class=" pageNum" style="cursor: pointer;"><a>4</a></li>
+									<li class=" pageNum" style="cursor: pointer;"><a>5</a></li>
+									<li style="cursor: pointer;" id="nextBarBtn"><a>»</a></li> -->
+									<li style="cursor: pointer;" id="lastPageBarBtn"><a>尾页</a></li>
+									<li>
+										<a style="padding-bottom: 4px;padding-top: 4px;">
+											跳转至	
+											<input type="text" onkeypress="return /[\d]/.test(String.fromCharCode(event.keyCode));" maxlength="3" style="width: 40px;padding-top: 0px;padding-bottom: 0px;margin-top: 0px;margin-bottom: 0px;">
+											页
+											<button type="button" class="btn btn-primary" style="width: 50px;padding-top: 0px;padding-bottom: 0px;margin-left: 0px;margin-right: 0px;">跳转</button>
+										</a>
+									</li>
+								</ul>
+							</nav></td>
+					</tr>
+				</tfoot>
+			</table>
 		</div>
 	</div>
 	<script type="text/javascript" src="../../../resources/jquery/jquery.min.js"></script>
@@ -108,7 +143,8 @@
 	<script type="text/javascript" src="../../../resources/jquery/jquery-validation-1.15.0/localization/messages_zh.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../../resources/assets/js/ie10-viewport-bug-workaround.js"></script>
-    <script type="text/javascript" src="../../common/common.js"></script>
-     <script type="text/javascript" src="js/dictindex.js"></script>
+    <script type="text/javascript" src="../../../views/common/common.js"></script>
+    <script type="text/javascript" src="../../../resources/table/table-grid3.js"></script>
+    <!-- <script type="text/javascript" src="page.js"></script> -->
 </body>
 </html>

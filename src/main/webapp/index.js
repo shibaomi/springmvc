@@ -14,8 +14,14 @@ function queryMenu(){
 }
 //查询菜单成功回调函数
 function queryMenuSucc(data){
-	globalParam.menuData=data.childMenu;
-	topMenuShow(globalParam.menuData);
+	if(isEmpty(data)){
+		alertMsg("未查到任何系统的菜单信息",{okBtn:true});
+		return;
+	}
+	for(var item in data){
+		globalParam.menuData=data[item].childMenu;
+		topMenuShow(globalParam.menuData);
+	}
 }
 
 //根据顶部菜单列表拼接显示顶部菜单

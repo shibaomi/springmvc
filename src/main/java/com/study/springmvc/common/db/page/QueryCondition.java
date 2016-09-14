@@ -24,7 +24,7 @@ public @Data class QueryCondition {
     /**
 	 * 当前页数，从1开始
 	 */
-    private int curPage = 1;
+    private int currPage = 1;
     
     /**
 	 * 排序字段
@@ -61,18 +61,18 @@ public @Data class QueryCondition {
 		if(curPage<1){
 			curPage=1;
 		}
-		this.curPage = curPage;
+		this.currPage = curPage;
 	}
 
 	public int getStartIndex() {
-		this.startIndex=(this.curPage-1)*this.pageSize;
+		this.startIndex=(this.currPage-1)*this.pageSize;
 		if(this.startIndex<1)
 			this.startIndex=0;
 		return startIndex;
 	}
 	
 	public int getEndIndex() {
-		this.endIndex=this.curPage*this.pageSize;
+		this.endIndex=this.currPage*this.pageSize;
 		if(this.endIndex<0)
 			this.endIndex=0;
 		return endIndex;

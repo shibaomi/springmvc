@@ -43,7 +43,7 @@ public class BaseDao_Mybatis extends SqlSessionTemplate {
 	public <T> Page<T> selectPageList(String statement, QueryCondition queryCondition) {
 		try {
 			int totalCount = getSelectCount(statement, queryCondition.getQueryCondition());
-			Page<T> page = new Page<T>(totalCount,queryCondition.getPageSize(), queryCondition.getCurPage());
+			Page<T> page = new Page<T>(totalCount,queryCondition.getPageSize(), queryCondition.getCurrPage());
 			PageRowBounds pageParamt=PageRowBounds.getPageParamter(queryCondition);
 			List<T> result = this.selectList(statement, queryCondition.getQueryCondition(), pageParamt);
 			page.setResult(result);;

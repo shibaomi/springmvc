@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="DictModelMapper">
+<mapper namespace="ModelMapper">
 	<!-- 配置给定模式的缓存, 默认的情况，mybatis 的一级缓存是默认开启的,二级缓存是没有开启，除了会话缓存以外，它可以提高性能，且能解决全局依赖。
 		开启二级缓存，只需要在SQL 映射文件中加入简单的一行：<cache/>
 		作用：

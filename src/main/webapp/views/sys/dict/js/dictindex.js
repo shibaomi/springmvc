@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$( "#queryForm").validate();
+//	$( "#queryForm").validate();
 //	DivFormValidate("queryForm");
 });
 
