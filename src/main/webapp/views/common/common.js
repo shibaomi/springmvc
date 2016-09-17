@@ -258,3 +258,16 @@ function formatUndefinedOrNullData(data){
 		return data;
 	}
 }
+
+//检查是否输入数字，给输入框onkeypress使用
+function NoNumbers(e){
+	var keynum="";
+	if(window.event){
+		// IE
+		keynum = String.fromCharCode(e.keyCode);
+	}else if(e.which){
+		// Netscape/Firefox/Opera
+		keynum = String.fromCharCode(e.which)
+	}
+	return !/\d/.test(keychar)
+}

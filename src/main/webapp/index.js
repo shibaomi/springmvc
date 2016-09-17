@@ -148,7 +148,7 @@ function clickMenuClick(menuDiv,url,level){
 	$(menuDiv).find("span").toggleClass("glyphicon-chevron-right");
 	$("#leftMenuDiv").find("li").find("a").removeClass("menu-active");//删除所有标识active的css类
 	$(menuDiv).toggleClass("menu-active");
-	if(isEmpty(url)){
+	if(!isEmpty(url)){
 		$('#ifra').attr({'src':url});
 	}
 }

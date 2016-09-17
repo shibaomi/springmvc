@@ -120,10 +120,13 @@ table thead tr th{
 	text-align: center;
 }
 
+table tbody tr{
+	background: #FFFFFF;
+}
+
 table tbody tr td{
 	border: 1px solid #B1D3EC !important;
 	text-align: center;
-	background: #FFFFFF;
 }
 
 table tfoot tr td{
@@ -146,4 +149,12 @@ table tfoot tr td{
 .pageMarinAndPadding{
 	margin: 0px;
 	padding:0px;
+}
+
+/**添加鼠标经过表格信息时的样式变化**/
+table>tbody>tr:hover{
+    background: #EBF4FA;
+}
+.tableActive{
+    background: #EBF4FA;
 }

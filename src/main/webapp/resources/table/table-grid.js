@@ -1,8 +1,14 @@
 
 (function($) {
+	//存储请求参数,可能累加一类的，
+	var memoryTableData={};
+	//保存请求参数,每个请求表格保存一个
+	var memoryReqData={};
+	//存储显示表格的数据，用于点击获取
+	var showTableListData={};
 	/**
 	 * 通过Params发送请求
-	 * @param params 格式："{url:url,currPage:1,pageSize:10,reqParams。。。。。}"
+	 * @param params 格式："{url:url,currPage:1,pageSize:10,reqParams。。。。。}对象"，必传
 	 * url：请求路径，必传
 	 * currPage：当前请求页，不传默认从1开始，不刷新页面的情况下为下一页的大小
 	 * pageSize：每页请求数量，不传默认为10，只初始化一次，每次改变大小时请求从第一页进行请求
@@ -10,474 +16,430 @@
 	 * @param successCallback:成功时候回调函数，
 	 * @param failCallbac：失败时候回调函数
 	 */
-	$.fn.search = function(params,successCallback,failCallback) {
+	$.fn.searchForTable = function(params,successCallback,failCallback) {
 		var tableId = $(this).attr("id");
-		//检查参数
-		if(params){
-			//currPage默认为1
-			var currPage = params["currPage"];
-			if(!currPage || currPage==null){
-				params = $.extend(params, {currPage:1});
-			}
-			//pageSize默认为10
-			var pageSize = params["pageSize"];
-			if(!pageSize || pageSize==null){
-				params = $.extend(params, {pageSize:10});
-			}
-			$(this).params(params);
-		}
-		
-		/*var actionParamsStr = $("#"+tableId+"_hidden_span").html();
-		var actionParams = eval("("+actionParamsStr+")");
-		var action = actionParams["_action"];*/
-		/*var paramsStr = "";
-		for(var p in actionParams){
-			if(p!='_action'){
-				if(typeof(actionParams[p])=="string")
-					paramsStr += p+":'"+actionParams[p]+"',";
-				else
-					paramsStr += p+":"+actionParams[p]+",";
+		//检查表格请求信息是否存在，不存在缓存
+		if(isEmpty(memoryReqData[tableId])){
+			memoryReqData[tableId]={
+					currPage:1,//当前页码
+					pageSize:10,//请求的数据条数
+					autoload:false,//是否初始化后进行数据加载
+					btnNum:5,//每页显示请求的按钮次数
+					startPageIndex:1,//每个分页导航条开始的页数信息记录，默认为1
+					skipShow:true,//跳转页是否显示,默认显示
+					pageInfoShow:true,//是否显示分页信息，如“第1/40页(共398条,10条/页)”
+					bindClickFunc:"",//给每条记录绑定点击事件
 			}
 		}
-		var params = {};
-		if(paramsStr.length>0){
-			paramsStr = "{"+paramsStr.substring(0,paramsStr.length-1)+"}";
-			params = eval("("+paramsStr+")");
-		}*/
-		var autoload = params["autoload"];
-		if(autoload==undefined || autoload){
-			showProgressBar(tableId);
-			
-				Newtouch.Ajax.sendParams(params, action, function(data){
-					
-					
-					setTimeout(function() {
-					hideProgressBar(tableId);
-					addJSONData(tableId, data);
-					
-					var message = $("div.message",$("#"+tableId));
-					if(message){
-						message.html("");
-					}
-					
-					if(successCallback){
-						if(typeof(successCallback)=="function"){
-							successCallback(data);
-						}
-						if(typeof(successCallback)=="string"){
-							eval(successCallback);
-						}
-					}
-					
-					},NewtouchContext.sleepTime);
-				}, function(error){
-					setTimeout(function() {
-					hideProgressBar(tableId);
-					
-					var message = $("div.message",$("#"+tableId));
-					if(message){
-						message.html(error);
-					}
-					
-					if(failCallback){
-						if(typeof(failCallback)=="function"){
-							failCallback(error);
-						}
-						if(typeof(failCallback)=="string"){
-							eval(failCallback);	
-						}
-					}
-					},NewtouchContext.sleepTime);}, false);
+		//params.url参数必须传，否则报错
+		if(isEmpty(params)||isEmpty(params["url"])){
+			alert("params.url参数必传");
+			return;
+		}
+		//合并请求参数
+		$.extend(memoryReqData[tableId],params);
+		//自动下载标识
+		if(memoryReqData[tableId]["autoload"]==true || memoryReqData[tableId]["autoload"]=='true'){
+			simplePostAjax(memoryReqData[tableId],memoryReqData[tableId]["url"],function(data){
+				memoryTableData[tableId]=data;
+				//显示表格数据信息
+				showTabelData(tableId, data);
+			});
 		}
 	};
-	
-	//把参数放置到html里面进行拼接，目前应该用不到
-	$.fn.params = function(params){
+	//获得当前页
+	$.fn.currPage = function(){
 		var tableId = $(this).attr("id");
-		//var actionParamsStr = $("#"+tableId+"_hidden_span").html();
-		var actionParams = eval("("+actionParamsStr+")");
-		if(params==undefined){
-			return actionParams;
-		}else{
-			var actionParams = $.extend(actionParams, params);
-			actionParamsStr = "";
-			for(var p in actionParams){
-				var s=actionParams[p]+"";
-				 s=s.replace(/\\/g,"\\\\").replace(/'/g,"\\\'");
-				 if(typeof(actionParams[p])=="string")
-						actionParamsStr += p+":'"+s+"',";
-					else 
-						actionParamsStr += p+":"+s+",";
-//				if(typeof(actionParams[p])=="string")
-//					actionParamsStr += p+":'"+actionParams[p]+"',";
-//				else 
-//					actionParamsStr += p+":"+actionParams[p]+",";
-			}
-			if(actionParamsStr.length>0)
-				actionParamsStr = "{"+actionParamsStr.substring(0,actionParamsStr.length-1)+"}";
-				
-			$("#"+tableId+"_hidden_span").html(actionParamsStr);
-		}
+		return memoryTableData[tableId]["currPage"];
 	};
-	
-	$.fn.currentPage = function(){
-		var tableId = $(this).attr("id");
-		
-		var actionParamsStr = $("#"+tableId+"_hidden_span").html();
-		var actionParams = eval("("+actionParamsStr+")");
-		
-		return actionParams["currentPageIndex"];
-	};
-	
+	//获得总条数
 	$.fn.totalCount = function(){
 		var tableId = $(this).attr("id");
-		
-		var span_totalCount = $("span.totalCount",$(this));
-		var totalCount = $(span_totalCount).html();
-		
-		return totalCount;
+		return memoryTableData[tableId]["totalCount"];
+	};
+	//获得总页数
+	$.fn.totalPage = function(){
+		var tableId = $(this).attr("id");
+		return memoryTableData[tableId]["totalPage"];
 	};
 	
-	$.fn.resetSelection = function(){
+	//获得请求数据
+	$.fn.tableData = function(){
 		var tableId = $(this).attr("id");
-		
-		$("input.grid_th_selector",$("#"+tableId)).attr("checked", false);
-		$("input.grid_tr_selector",$("#"+tableId)).each(function(index,dom){
-			$(dom).attr("checked", false);
-		});
+		return memoryTableData[tableId];
 	};
-	
-	$.fn.record = function(rowId){
+	//获得选择的信息
+	$.fn.selectRecords=function(){
 		var tableId = $(this).attr("id");
-		var record = null;
-		
-		$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(index, dom){
-			if(index==rowId){
-				record = $.data(dom,"record");
+		var recordsList=[];
+		// td input
+		$("#"+tableId+"  tbody tr").each(function (index, domEle){
+			//获取关键信息
+			var dataKey=domEle.attributes.dataKey.value;
+			var selectRecord="";
+			$("td input",$(domEle)).each(function (index, domEle){
+				if(domEle.checked){
+					//获得选择的值信息
+					selectRecord=$("#"+tableId).getOneDataByKey(dataKey);
+				}
+			});
+			if(!isEmpty(selectRecord)){
+				recordsList.push(selectRecord);
 			}
 		});
-		return record;
-	};
-	
-	$.fn.selectedRecords = function(){
+		return recordsList;
+	}
+	//根据每条信息的索引值查数据信息
+	$.fn.getOneDataByKey=function(keyIndex){
 		var tableId = $(this).attr("id");
-		var records = new Array();
-		
-		$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(index, dom){
-			var input = $("input.grid_tr_selector", $(dom)).get(0);
-			if(input){
-				var value = $.data(dom,"record");
-				var checked = $(input).attr("checked");
-				if(checked && value!=null)
-					records.push(value);
-			}
-		});
-		
-		return records;
+		return memoryTableData[tableId]["keyDateItems"][keyIndex];
+	}
+	
+	
+	
+	/*******************************自定义行数调用******************************************/
+	//拼接显示列表
+	var showTabelData = function(tableId, data){
+		//设置分页导航信息
+		setPageBar(tableId, data);
+		//显示表格信息
+		showTableBodyInfo(tableId, data);
 	};
-	
-	$.fn.clearMessage = function(){
-		var message = $("div.message",$("#"+tableId));
-		if(message) message.html("");
-	};
-	
-	
-	$.fn.totalCount = function(){
-		var tableId = $(this).attr("id");
-		
-		var span_totalCount = $("span.totalCount",$(this));
-		var totalCount = $(span_totalCount).html();
-		
-		return totalCount;
-	};
-	
-	$.fn.goShowProgressBar = function(){
-		var tableId = $(this).attr("id");
-		var loadingElement = document.getElementById(tableId+"_loading1");
-		if(loadingElement==null){
-			var loadingDivHtml = "<div id='"+tableId+"_loading1' class='gridloading'>";
-			//slc2-29
-//			loadingDivHtml += " 正在加载...";
-			loadingDivHtml += " <div id='gridloadingImg' />"
-			loadingDivHtml += "</div>";
-			
 
-			$("#"+tableId).before(loadingDivHtml);
+	//设置更新分页插件，表格下面的页码导航
+	var setPageBar=function (tableId, data){
+		var items = data.result;
+		var currPage = parseInt(data.currPage);
+		var lastPage =  parseInt(data.lastPage);
+		var nextPage =  parseInt(data.nextPage);
+		var pageSize =  parseInt(data.pageSize);
+		var prePage =  parseInt(data.prePage);
+		var totalCount =  parseInt(data.totalCount);
+		var totalPage =  parseInt(data.totalPage);
+		var filedList=getTableFiled(tableId);//要显示的表格数据列数
+		var btnNum=memoryReqData[tableId]["btnNum"];
+		var startPageIndex=memoryReqData[tableId]["startPageIndex"];
+		//分页导航拼接
+		var tfoot=$("#"+tableId +" tfoot");
+		//计算每一条开始的
+		if(isEmpty(tfoot)||tfoot.length<1){
+			$("#"+tableId).append("<tfoot></tfoot>");
 		}
-		$("#"+tableId+"_loading1").show();
-		
-	};
-	
-	
-	$.fn.gohHideProgressBar=	 function(){
-		var tableId = $(this).attr("id");
-			var loadingElement = document.getElementById(tableId+"_loading1");
-			if(loadingElement!=null){
-				$(loadingElement).hide();
+		var pageBarStr='<tr>';
+		pageBarStr	 +=		'<td colspan="'+filedList.length+'">';
+		pageBarStr	 +=			'<nav>';
+		pageBarStr	 +=				'<ul class="pagination pageMarinAndPadding">';
+		if(memoryReqData[tableId]["pageInfoShow"]){
+			pageBarStr	 +=				'<li ><a>第'+currPage+'/'+totalPage+'页(共'+totalCount+'条,'+pageSize+'条/页)</a></li>';
+		}
+		pageBarStr	 +=					'<li style="cursor:pointer;" id="firstPageBarBtn"><a>首页</a></li>';
+		pageBarStr	 +=					'<li style="cursor:pointer;" id="preBarBtn"><a>&laquo;</a></li>';
+		for(var i=0;i<btnNum;i++){
+			var pageNum=i+startPageIndex;
+			if(totalPage>=pageNum){
+				var activeClass='';
+				if(pageNum==currPage){
+					//设置选中的页高亮
+					activeClass=' active ';
+				}
+				pageBarStr	 +=			'<li class="'+activeClass+' pageNum" style="cursor:pointer;"><a>'+pageNum+'</a></li>';
+			}else{
+				break;
 			}
 		}
-})(jQuery);
-
-$(function() {
-	$("table.gridtable").each(function(index, dom){
-		$(dom).search();
-		var tableId = $(dom).attr("id");
-		pagebar(tableId);
-	});
-});
-
-var addJSONData = function(tableId, data){
-	var items = data.items;
-	var currentPageIndex = parseInt(data.currentPageIndex);
-	var lastPageIndex =  parseInt(data.lastPageIndex);
-	var nextPageIndex =  parseInt(data.nextPageIndex);
-	var pageSize =  parseInt(data.pageSize);
-	var previousPageIndex =  parseInt(data.previousPageIndex);
-	var totalCount =  parseInt(data.totalCount);
-	var totalPage =  parseInt(data.totalPage);
-	
-	var span_totalCount = $("span.totalCount",$("#"+tableId));
-	$(span_totalCount).html(totalCount);
-	var span_currentPageIndex = $("span.currentPageIndex",$("#"+tableId));
-	$(span_currentPageIndex).html(currentPageIndex);
-	var span_totalPage = $("span.totalPage",$("#"+tableId));
-	$(span_totalPage).html(totalPage);
-	var input_currentPage = $("input.currentPage",$("#"+tableId));
-	$(input_currentPage).val(currentPageIndex);
-	var input_pageSize = $("input.pageSize",$("#"+tableId));
-	$(input_pageSize).val(pageSize);
-	
-	var pagebar = $("div.pagebar",$("#"+tableId));
-	if(pagebar){	
-		if(currentPageIndex==1){
-			$(".firstPage",pagebar).removeAttr("href");
-			$(".previousPage",pagebar).removeAttr("href");
+		//判断是否到了最后一轮导航条
+		if((startPageIndex+btnNum)>totalPage){
+			pageBarStr	 +=				'<li class="disabled"><a>&raquo;</a></li>';
 		}else{
-			$(".firstPage",pagebar).attr("href","javascript:void(0)");
-			$(".previousPage",pagebar).attr("href","javascript:void(0)");
+			pageBarStr	 +=				'<li style="cursor:pointer;" id="nextBarBtn"><a>&raquo;</a></li>';
 		}
-		if(currentPageIndex>=totalPage){
-			$(".nextPage",pagebar).removeAttr("href");
-			$(".lastPage",pagebar).removeAttr("href");
+		pageBarStr	 +=					'<li style="cursor:pointer;" id="lastPageBarBtn"><a>尾页</a></li>';
+		if(memoryReqData[tableId]["skipShow"]){
+			pageBarStr	 +=				'<li >';
+			pageBarStr	 +=					'<a style="padding-bottom: 4px;padding-top: 4px;">跳转至';
+			pageBarStr	 +=						'<input id="skipNumInput" type="text" maxlength="4" style="width: 40px;padding-top: 0px;padding-bottom: 0px;margin-top: 0px;margin-bottom: 0px;">页';
+			pageBarStr	 +=						'<button id="skipBtn" type="button" class="btn btn-primary" style="width: 50px;padding-top: 0px;padding-bottom: 0px;margin-left: 0px;margin-right: 0px;">跳转</button>';
+			pageBarStr	 +=					'</a>';
+			pageBarStr	 +=				'</li>';
+		}
+		pageBarStr	 +=				'</ul>';
+		pageBarStr	 +=			'</nav>';
+		pageBarStr	 +=		'</td>';
+		pageBarStr	 +='</tr>';
+		$("#"+tableId +" tfoot").html(pageBarStr);
+		//添加向前一轮分页查询点击按钮事件
+		if(startPageIndex==1){
+			$("#preBarBtn",$("#"+tableId)).addClass("disabled");
 		}else{
-			$(".nextPage",pagebar).attr("href","javascript:void(0)");
-			$(".lastPage",pagebar).attr("href","javascript:void(0)");
+			bindClickForPreBarBtn(tableId);
+		}
+		//添加向后一轮分页查询点击按钮事件
+		if((startPageIndex+btnNum)>totalPage){
+			$("#nextBarBtn",$("#"+tableId)).addClass("disabled");
+		}else{
+			bindClickForNextBarBtn(tableId);
+		}
+		//为每个页码添加点击事件
+		addClickFuncForPageNum(tableId);
+		//为首页添加绑定事件
+		addClickFuncForFirstPage(tableId);
+		//为尾页添加绑定事件
+		addClickFuncForLastPage(tableId);
+		//为跳转添加绑定事件
+		addClickFuncForSkipBtn(tableId);
+		//跳转信息输入框绑定事件
+		addEnterKeyEnvent(tableId);
+	}
+	
+	//跳转信息输入框绑定事件,只输入数字
+	function addEnterKeyEnvent(tableId){
+		$("#skipNumInput").keypress(function(e){
+			var keynum="";
+			if(window.event){
+				// IE
+				keynum = e.keyCode;
+			}else if(e.which){
+				// Netscape/Firefox/Opera
+				keynum = e.which;
+			}
+			if(keynum==13){
+				//获取输入页码值
+				var skipNum=$("#skipNumInput",$("#"+tableId)).val();
+				if(isEmpty(skipNum)){
+					alertMsg("请输入跳转的页码");
+					$("#skipBtn",$("#"+tableId)).focus();
+					return false;
+				}
+				memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
+				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+				memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
+				$("#"+tableId).search(memoryReqData[tableId]);
+				return false;
+			}else{
+				return /[\d]/.test(String.fromCharCode(keynum));
+			}
+		});
+	}
+
+	//获得表格要显示的字段名称
+	var getTableFiled=function(tableId){
+		var filedList=[];
+		//$("#operLogList  thead tr th").each方法，循环$("#operLogList  thead tr th")查询到的节点信息进行处理，jquery方法
+		$("#"+tableId+"  thead tr th").each(function (index, domEle){
+			filedList.push($(domEle).attr("field"));
+		})
+		return filedList;
+	}
+	//显示表格体信息
+	var showTableBodyInfo=function (tableId, data){
+		var items = data.result;
+		if(isEmpty(items)||items.length<1){
+			return;
+		}
+		//表格体信息
+		var tbody=$("#"+tableId +" tbody");
+		if(isEmpty(tbody)||tbody.length<1){
+			$("#"+tableId).append("<tbody></tbody>");
+		}
+		//获得要显示的字段配置
+		var filedList=getTableFiled(tableId);
+		//显示的表格体信息
+		var tableBodyStr='';
+		//存储当前表格的数据
+		showTableListData[tableId]=items;
+		var currTime=new Date().getTime();
+		var keyDateItems={};
+		//拼接表格信息
+		for(var i=0;i<items.length;i++){
+			var dateKey=currTime+""+i;//每条信息的唯一标识key值
+			tableBodyStr     +='<tr dataKey="'+dateKey+'">';
+			//存储每条列表信息，key为tr上的唯一值，数据为每条信息的详细数据
+			keyDateItems[dateKey]=items[i];
+			for(var j=0;j<filedList.length;j++){
+				if(filedList[j]=="radio"){
+					tableBodyStr +=	'<td><input type="radio" name="tableRadio"/></td>';
+				}else if(filedList[j]=="checkbox"){
+					tableBodyStr +=	'<td><input type="checkbox"/></td>';
+				}else{
+					tableBodyStr +=	'<td>'+formatUndefinedOrNullData(items[i][filedList[j]])+'</td>';
+				}
+			}
+			tableBodyStr     +="</tr>"
+		}
+		memoryTableData[tableId]["keyDateItems"]=keyDateItems;
+		$("#"+tableId +" tbody").html(tableBodyStr);
+		//为每条信息添加绑定事件
+		addClickFuncForTableList(tableId);
+	}
+	
+	//每条信息添加绑定事件
+	function addClickFuncForTableList(tableId){
+		if(!isEmpty(memoryReqData[tableId]["bindClickFunc"])){
+			$("#"+tableId+"  tbody tr").each(function (index, domEle){
+				$(domEle).bind("click",memoryReqData[tableId]["bindClickFunc"]());
+			})
+		}else{
+			//没设置绑定事件，添加默认事件
+			addDefaultClickFuncForTableList(tableId);
 		}
 	}
 	
-	$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(index, dom){
-		$(dom).remove();
-	});
-	
-	var i=0;
-	for(;i<items.length;){
-		$("#"+tableId+" tbody tr.grid_tr_templete").each(function(index, dom){
-			var o = items[i++];
-			if(o){
-				var new_tr = $(dom).clone();
-				$(new_tr).removeClass("grid_tr_templete");
-				$(new_tr).css("display","");
-				$.data($(new_tr).get(0),"record",o);
-				$("td",$(new_tr)).each(function(j, d){
-					var field = $("#"+tableId+" thead tr th:eq("+j+")").attr("field");
-					if(field!=undefined && field!=""){
-						$(d).attr("title",o[field]);
-						if(o[field]!= undefined && o[field] != "")
-							$(d).html(o[field]);
-						else
-							$(d).html("&nbsp;");
+	//若没有添加绑定事件则默认一个事件，该事件点击时若存在单选框默认选中单选框
+	function addDefaultClickFuncForTableList(tableId){
+		$("#"+tableId+"  tbody tr").each(function (index, domEle){
+			//父元素添加点击事件
+			$(domEle).bind("click",function (){
+				$("td input",$(this)).each(function (index1, domEle1){
+					if(domEle1.type=="radio"){
+						domEle1.checked=true;
+						$(domEle1).parent().parent().parent().find("tr").removeClass("tableActive");
+						$(domEle1).parent().parent().addClass("tableActive");
+					}else{
+						if(domEle1.checked){
+							domEle1.checked=false;
+							$(domEle1).parent().parent().removeClass("tableActive");
+						}else{
+							domEle1.checked=true;
+							$(domEle1).parent().parent().addClass("tableActive");
+						}
 					}
 				});
-				$("#"+tableId+" tbody").append(new_tr);
-			}
-		});
-	}
-	
-	sorter();
-	selector(tableId);
-	setIndex(tableId);
-	formatter(tableId);
-};
-	
-var sorter = function(){
-	//排序功能实现
-	var headers = "";
-	var sortList = "";
-	var formatterList = "";
-	$("table.tablesorter thead tr th").each(function(index, dom){
-		var th_class = $(this).attr("class");
-		if(th_class.indexOf("sortable")==-1){
-			headers = headers +index +":{sorter: false},"
-		}
-		
-		if(th_class.indexOf("sortable-desc")>=0){
-			sortList = sortList +"["+index+",1"+"],";
-		}else if(th_class.indexOf("sortable-asc")>=0){
-			sortList = sortList +"["+index+",0"+"],";
-		}
-	});
-	
-	var headers_object = eval("({"+headers.substring(0,headers.length-1)+"})");
-	var sortList_object = eval("(["+sortList.substring(0,sortList.length-1)+"])");
-	$("table.tablesorter").tablesorter({
-		headers:headers_object,
-		sortList:sortList_object
-	});
-}
-
-var setIndex = function(tableId){
-	var currentPageIndex = parseInt($("input.currentPage",$("#"+tableId)).val());
-	var pageSize = parseInt($("input.pageSize",$("#"+tableId)).val());
-
-	//设置序号功能实现
-	$("#"+tableId+" thead tr th").each(function(index, dom){
-		var th_class = $(this).attr("class");
-		var result = /(.*\\s)?[iI][nN][dD][eE][xX](\\s.*)?/.test(th_class);
-		
-		if(result){
-			$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(i, d){
-				var td_d = $("td:eq("+index+")", d);
-				td_d.html(pageSize*(currentPageIndex-1)+i+1);
 			});
-		}
-	});
-}
-
-var formatter = function(tableId){
-	//格式化功能实现
-	$("#"+tableId+" thead tr th").each(function(index, dom){
-		var th_class = $(this).attr("class");
-		//var result = /(.*\\s)?[fF][oO][rR][mM][aA][tT][tT][eE][rR]-.+(\\s.*)?/.test(th_class);
-		
-		if(th_class.indexOf("formatter")>=0){
-			var th_class_array = th_class.split(" ");
-			var fn = "";
-			for(var i=0;i<th_class_array.length;i++){
-				if(th_class_array[i].indexOf("formatter")>=0){
-					fn = th_class_array[i].substring(10,th_class_array[i].length);
-					break;
-				}
-			}
-			
-			$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(i, d){
-				var cell = $("td:eq("+index+")", d);
-				var data = $.data(d,"record");
-				
-				if(fn && fn!="" && data){
-					eval("("+fn+"(cell, data)"+")");
+			//对checkBox事件父事件进行屏蔽
+			$(":checkbox",$(domEle)).bind("click",function (e){
+				e.stopPropagation();
+				$(this).prop("checked");
+				if(this.checked){
+					$(this).parent().parent().addClass("tableActive");
+				}else{
+					$(this).parent().parent().removeClass("tableActive");
 				}
 			});
-		}
-	});
-}
-
-var selector = function(tableId){
-	//多选框实现
-	$("#"+tableId+" thead tr th").each(function(index, dom){
-		var th_class = $(this).attr("class");
-		var isCheckbox = /(.*\\s)?[cC][hH][eE][cC][kK][bB][oO][xX](\\s.*)?/.test(th_class);
-		var isRadio = /(.*\\s)?[rR][aA][dD][iI][oO](\\s.*)?/.test(th_class);
-		
-		if(isCheckbox){
-			$(this).attr("align","center");
-			$(this).html("<input id='"+tableId+"_th_checkbox' type='checkbox' class='grid_th_selector'>");
-			
-			$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(i, d){
-				var td_d = $("td:eq("+index+")", d);
-				$(td_d).attr("align","center");
-				$(td_d).html("<input type='checkbox' name='checkbox' class='grid_tr_selector'>");
-			});
-		}else if(isRadio){
-			$("#"+tableId+" tbody tr:not(.grid_tr_templete)").each(function(i, d){
-				var td_d = $("td:eq("+index+")", d);
-				$(td_d).attr("align","center");
-				$(td_d).html("<input type='radio' name='radio' class='grid_tr_selector'>");
-			});
-		}
-	});
+		})
+	}
 	
-	$("input.grid_th_selector",$("#"+tableId)).bind("click",function(e){
-		var checked = $(this).attr("checked");
-		$("input.grid_tr_selector",$("#"+tableId)).each(function(index,dom){
-			$(dom).attr("checked", checked);
+	//首页添加绑定事件
+	function addClickFuncForFirstPage(tableId){
+		$("#firstPageBarBtn",$("#"+tableId)).bind("click",function(){
+			memoryReqData[tableId]["currPage"]=1;//当前页码
+			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+			memoryReqData[tableId]["startPageIndex"]=1;
+			$("#"+tableId).search(memoryReqData[tableId]);
 		});
-	});
-}
-
-var pagebar = function(tableId){
-	var pagebar = $("div.pagebar",$("#"+tableId));
-	var successCallback;
-	var failCallback;
-	if($("input.successCallback",$("#"+tableId))){
-		successCallback = $("input.successCallback",$("#"+tableId)).val();
 	}
-	if($("input.failCallback",$("#"+tableId))){
-		failCallback = $("input.failCallback",$("#"+tableId)).val();
+	//跳转添加绑定事件
+	function addClickFuncForSkipBtn(tableId){
+		$("#skipBtn",$("#"+tableId)).bind("click",function(){
+			//获取输入页码值
+			var skipNum=$("#skipNumInput",$("#"+tableId)).val();
+			if(isEmpty(skipNum)){
+				alertMsg("请输入跳转的页码");
+				$("#skipBtn",$("#"+tableId)).focus();
+				return;
+			}
+			memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
+			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+			memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
+			$("#"+tableId).search(memoryReqData[tableId]);
+		});
 	}
-		
-	$("a.firstPage",pagebar).bind("click",function(){
-		$("#"+tableId).search({'currentPageIndex':1},successCallback,failCallback);
-	});
-	$("a.previousPage",pagebar).bind("click",function(){
-		var span_currentPageIndex = $("span.currentPageIndex",$("#"+tableId));
-		var currentPageIndex = parseInt($(span_currentPageIndex).html());
-		
-		$("#"+tableId).search({'currentPageIndex':(currentPageIndex>1?(currentPageIndex-1):1)},successCallback,failCallback);
-	});
-	$("a.nextPage",pagebar).bind("click",function(){
-		var span_currentPageIndex = $("span.currentPageIndex",$("#"+tableId));
-		var currentPageIndex = parseInt($(span_currentPageIndex).html());
-		var span_totalPage = $("span.totalPage",$("#"+tableId));
-		var totalPage = parseInt($(span_totalPage).html());
-		
-		$("#"+tableId).search({'currentPageIndex':(currentPageIndex<totalPage?(currentPageIndex+1):totalPage)},successCallback,failCallback);
-	});
-	$("a.lastPage",pagebar).bind("click",function(){
-		var span_totalPage = $("span.totalPage",$("#"+tableId));
-		var totalPage = parseInt($(span_totalPage).html());
-		
-		$("#"+tableId).search({'currentPageIndex':totalPage},successCallback,failCallback);
-	});
-	/*$("input.currentPage",pagebar).bind("change",function(){
-		var span_totalPage = $("span.totalPage",$("#"+tableId));
-		var totalPage = parseInt($(span_totalPage).html());
-		var input = $("input.currentPage",$("#"+tableId));
-		var currentPageIndex = parseInt($(input).val());
-		
-		$("#"+tableId).search({'currentPageIndex':currentPageIndex>totalPage?totalPage:(currentPageIndex<1?1:currentPageIndex)},successCallback,failCallback);
-	});*/
-	$("input.currentPage", pagebar).keyup(function(event) {
-		if (event.keyCode == 13) {
-			var span_totalPage = $("span.totalPage",$("#"+tableId));
-			var totalPage = parseInt($(span_totalPage).html());
-			var input = $("input.currentPage",$("#"+tableId));
-			var currentPageIndex = parseInt($(input).val());
-			
-			$("#"+tableId).search({'currentPageIndex':currentPageIndex>totalPage?totalPage:(currentPageIndex<1?1:currentPageIndex)},successCallback,failCallback);
-		}
-	});
-}
-
-var showProgressBar = function(tableId){
-	var loadingElement = document.getElementById(tableId+"_loading");
-	if(loadingElement==null){
-		var loadingDivHtml = "<div id='"+tableId+"_loading' class='gridloading'>";
-		//slc2-29
-//		loadingDivHtml += " 正在加载...";
-		loadingDivHtml += " <div id='gridloadingImg' />"
-		loadingDivHtml += "</div>";
-		
-		
-		$("#"+tableId).before(loadingDivHtml);
+	//尾页添加绑定事件
+	function addClickFuncForLastPage(tableId){
+		$("#lastPageBarBtn",$("#"+tableId)).bind("click",function(){
+			memoryReqData[tableId]["currPage"]=memoryTableData[tableId]["totalPage"];//当前页码
+			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+			var btnNum=memoryReqData[tableId]["btnNum"];
+			var newStartPageIndex=memoryTableData[tableId]["totalPage"]-btnNum+1;
+			if(newStartPageIndex<1){
+				newStartPageIndex=1;
+			}
+			memoryReqData[tableId]["startPageIndex"]=newStartPageIndex;
+			$("#"+tableId).search(memoryReqData[tableId]);
+		});
 	}
-	$("#"+tableId+"_loading").show();
+	//为每个页码添加点击事件
+	function addClickFuncForPageNum(tableId){
+		$("#"+tableId+"  tfoot tr td .pageNum").each(function (index, domEle){
+			var pageNum=$("a",$(domEle)).text();//获取当前页码
+			//为每个页码添加点击事件
+			$(domEle).bind("click",function(t){
+				var currPage=memoryReqData[tableId]["currPage"];
+				if(currPage==pageNum){
+					return;
+				}
+				//获取当前的开始页
+				var startPageIndex=memoryReqData[tableId]["startPageIndex"];
+				if(isEmpty(startPageIndex)){
+					startPageIndex=1;
+					memoryReqData[tableId]["startPageIndex"]=1;
+				}
+				var btnNum=memoryReqData[tableId]["btnNum"];
+				//如果当前页面和开始页码之差是大于最大显示页码的1/2且总页码大于当前最大显示页面，开始页码重新设置
+				var totalPage=memoryTableData[tableId]["totalPage"];
+				if(pageNum-startPageIndex>Math.floor(btnNum/2)){
+					var newStartPageIndex=pageNum-Math.floor(btnNum/2);
+					if(newStartPageIndex+btnNum>totalPage){
+						newStartPageIndex=totalPage-btnNum+1;
+					}
+					memoryReqData[tableId]["startPageIndex"]=newStartPageIndex;
+				}else if(pageNum-startPageIndex<1){
+					//若当前页面和开始页码之差小于1，则开始页码重新设置
+					var newStartPageIndex=pageNum-Math.floor(btnNum/2);
+					if(newStartPageIndex<1){
+						newStartPageIndex=1;
+					}else if(newStartPageIndex+btnNum>totalPage){
+						newStartPageIndex=totalPage-btnNum+1;
+					}
+					memoryReqData[tableId]["startPageIndex"]=newStartPageIndex;
+				}
+				memoryReqData[tableId]["currPage"]=pageNum;//当前页码
+				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+				$("#"+tableId).search(memoryReqData[tableId]);
+			});
+		})
+	}
 	
-}
-
-var hideProgressBar = function(tableId){
-	var loadingElement = document.getElementById(tableId+"_loading");
-	if(loadingElement!=null){
-		$(loadingElement).hide();
+	//绑定查向前一轮的按钮事件
+	function bindClickForPreBarBtn(tableId){
+		$("#preBarBtn",$("#"+tableId)).bind("click",function(){
+			//获取当前的开始页
+			var startPageIndex=memoryReqData[tableId]["startPageIndex"];
+			if(isEmpty(startPageIndex)){
+				startPageIndex=1;
+			}
+			var btnNum=memoryReqData[tableId]["btnNum"];
+			//计算上一轮的开始页
+			var preCurrPage=startPageIndex-btnNum;
+			if(preCurrPage<1){
+				preCurrPage=1;
+			}
+			memoryReqData[tableId]["currPage"]=preCurrPage;//当前页码
+			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+			memoryReqData[tableId]["startPageIndex"]=preCurrPage;//下一开始页码为nextCurrPage
+			$("#"+tableId).search(memoryReqData[tableId]);
+		});
 	}
-}
-
+	//绑定查向后一轮的按钮事件
+	function bindClickForNextBarBtn(tableId){
+		$("#nextBarBtn",$("#"+tableId)).bind("click",function(){
+			//获取当前的开始页
+			var startPageIndex=memoryReqData[tableId]["startPageIndex"];
+			if(isEmpty(startPageIndex)){
+				startPageIndex=1;
+			}
+			var btnNum=memoryReqData[tableId]["btnNum"];
+			//计算下一轮的开始页
+			var nextCurrPage=startPageIndex+btnNum;
+			var totalPage=memoryTableData[tableId]["totalPage"];
+			if(!isEmpty(totalPage)){
+				if(nextCurrPage>=totalPage){
+					nextCurrPage=totalPage;
+				}
+			}
+			memoryReqData[tableId]["currPage"]=nextCurrPage;//当前页码
+			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+			memoryReqData[tableId]["startPageIndex"]=nextCurrPage;//下一开始页码为nextCurrPage
+			$("#"+tableId).search(memoryReqData[tableId]);
+		});
+	}
+})(jQuery);
