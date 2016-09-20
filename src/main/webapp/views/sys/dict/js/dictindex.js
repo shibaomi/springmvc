@@ -1,14 +1,18 @@
+//页面加载调用方法
 $(document).ready(function(){
+	//页面加载方法调用，查询数据字典信息
 	queryList();
 });
 //查询数据字典信息
 function queryList(){
-	
-//	$("#dictTableList").searchForTable({
-//		url:'/springmvc/sys/dict/queryPageDictModel',
-//		autoload:true,//初始化后进行数据加载
-//	});
-	
+	var formDatas=$("#queryForm").formDatas();
+	var queryCondition={
+			queryCondition:formDatas,
+			autoload:true,
+			url:'/springmvc/sys/dict/queryPageDictModel'
+	};
+	//分页查询
+	$("#dictTableList").searchForTable(queryCondition);
 }
 
 function savaOrUpdateMenu(){
@@ -16,4 +20,11 @@ function savaOrUpdateMenu(){
 		return;
 	}
 	console.log(11);
+}
+
+//
+function test(){
+//	$.loadProgressBar();
+//	console.log(111);
+	$.addimage();
 }

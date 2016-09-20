@@ -36,14 +36,23 @@
 			alert("params.url参数必传");
 			return;
 		}
+		if(isEmpty(params["currPage"])){
+			params["currPage"]=1;
+		}
+		if(isEmpty(params["startPageIndex"])){
+			params["startPageIndex"]=1;
+		}
 		//合并请求参数
 		$.extend(memoryReqData[tableId],params);
 		//自动下载标识
 		if(memoryReqData[tableId]["autoload"]==true || memoryReqData[tableId]["autoload"]=='true'){
+			$.loadProgressBar();
 			simplePostAjax(memoryReqData[tableId],memoryReqData[tableId]["url"],function(data){
+				$("#progressBarInfoDiv").attr("style", "width: 100%;");
 				memoryTableData[tableId]=data;
 				//显示表格数据信息
 				showTabelData(tableId, data);
+				$.removeProgressBar();
 			});
 		}
 	};
@@ -119,6 +128,20 @@
 		var filedList=getTableFiled(tableId);//要显示的表格数据列数
 		var btnNum=memoryReqData[tableId]["btnNum"];
 		var startPageIndex=memoryReqData[tableId]["startPageIndex"];
+		//若开始页大于总页数，从新设置开始页为
+		if(startPageIndex>totalPage){
+			//若总页数小于要显示的个数，则全部显示，startPageIndex从1开始
+			if(totalPage<=btnNum){
+				memoryReqData[tableId]["startPageIndex"]=1;
+				startPageIndex=1;
+			}else if(btnNum+currPage>totalPage){
+				memoryReqData[tableId]["startPageIndex"]=totalPage-btnNum+1;
+				startPageIndex=totalPage-btnNum+1;
+			}else{
+				memoryReqData[tableId]["startPageIndex"]=currPage;
+				startPageIndex=currPage;
+			}
+		}
 		//分页导航拼接
 		var tfoot=$("#"+tableId +" tfoot");
 		//计算每一条开始的
@@ -130,7 +153,7 @@
 		pageBarStr	 +=			'<nav>';
 		pageBarStr	 +=				'<ul class="pagination pageMarinAndPadding">';
 		if(memoryReqData[tableId]["pageInfoShow"]){
-			pageBarStr	 +=				'<li ><a>第'+currPage+'/'+totalPage+'页(共'+totalCount+'条,'+pageSize+'条/页)</a></li>';
+			pageBarStr	 +=				'<li id="pageInfoDiv"><a>第'+currPage+'/'+totalPage+'页(共'+totalCount+'条,'+pageSize+'条/页)</a></li>';
 		}
 		pageBarStr	 +=					'<li style="cursor:pointer;" id="firstPageBarBtn"><a>首页</a></li>';
 		pageBarStr	 +=					'<li style="cursor:pointer;" id="preBarBtn"><a>&laquo;</a></li>';
@@ -155,7 +178,7 @@
 		}
 		pageBarStr	 +=					'<li style="cursor:pointer;" id="lastPageBarBtn"><a>尾页</a></li>';
 		if(memoryReqData[tableId]["skipShow"]){
-			pageBarStr	 +=				'<li >';
+			pageBarStr	 +=				'<li id="skipInfoDiv">';
 			pageBarStr	 +=					'<a style="padding-bottom: 4px;padding-top: 4px;">跳转至';
 			pageBarStr	 +=						'<input id="skipNumInput" type="text" maxlength="4" style="width: 40px;padding-top: 0px;padding-bottom: 0px;margin-top: 0px;margin-bottom: 0px;">页';
 			pageBarStr	 +=						'<button id="skipBtn" type="button" class="btn btn-primary" style="width: 50px;padding-top: 0px;padding-bottom: 0px;margin-left: 0px;margin-right: 0px;">跳转</button>';
@@ -179,16 +202,25 @@
 		}else{
 			bindClickForNextBarBtn(tableId);
 		}
-		//为每个页码添加点击事件
-		addClickFuncForPageNum(tableId);
-		//为首页添加绑定事件
-		addClickFuncForFirstPage(tableId);
-		//为尾页添加绑定事件
-		addClickFuncForLastPage(tableId);
-		//为跳转添加绑定事件
-		addClickFuncForSkipBtn(tableId);
-		//跳转信息输入框绑定事件
-		addEnterKeyEnvent(tableId);
+		if(totalCount>0){
+			//为每个页码添加点击事件
+			addClickFuncForPageNum(tableId);
+			//为首页添加绑定事件
+			addClickFuncForFirstPage(tableId);
+			//为尾页添加绑定事件
+			addClickFuncForLastPage(tableId);
+			//为跳转添加绑定事件
+			addClickFuncForSkipBtn(tableId);
+			//跳转信息输入框绑定事件
+			addEnterKeyEnvent(tableId);
+		}else{
+			$("#firstPageBarBtn",$("#"+tableId)).addClass("disabled");
+			$("#lastPageBarBtn",$("#"+tableId)).addClass("disabled");
+			$("#skipBtn",$("#"+tableId)).addClass("disabled");
+			$("#pageInfoDiv",$("#"+tableId)).addClass("disabled");
+			$("#skipInfoDiv",$("#"+tableId)).addClass("disabled");
+			$("#skipNumInput",$("#"+tableId)).attr("disabled","disabled");
+		}
 	}
 	
 	//跳转信息输入框绑定事件,只输入数字
@@ -210,10 +242,12 @@
 					$("#skipBtn",$("#"+tableId)).focus();
 					return false;
 				}
-				memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
-				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
-				memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
-				$("#"+tableId).search(memoryReqData[tableId]);
+				if(memoryReqData[tableId]["currPage"]!=parseInt(skipNum)){
+					memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
+					memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+					memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
+					$("#"+tableId).searchForTable(memoryReqData[tableId]);
+				}
 				return false;
 			}else{
 				return /[\d]/.test(String.fromCharCode(keynum));
@@ -233,16 +267,18 @@
 	//显示表格体信息
 	var showTableBodyInfo=function (tableId, data){
 		var items = data.result;
-		if(isEmpty(items)||items.length<1){
-			return;
-		}
+		//获得要显示的字段配置
+		var filedList=getTableFiled(tableId);
 		//表格体信息
 		var tbody=$("#"+tableId +" tbody");
 		if(isEmpty(tbody)||tbody.length<1){
 			$("#"+tableId).append("<tbody></tbody>");
 		}
-		//获得要显示的字段配置
-		var filedList=getTableFiled(tableId);
+		if(isEmpty(items)||items.length<1){
+			//如果无信息提示无信息
+			$("#"+tableId +" tbody").html('<tr><td colspan="'+filedList.length+'" class="warning">亲，未查到您想要的信息</td></tr>');
+			return;
+		}
 		//显示的表格体信息
 		var tableBodyStr='';
 		//存储当前表格的数据
@@ -321,10 +357,13 @@
 	//首页添加绑定事件
 	function addClickFuncForFirstPage(tableId){
 		$("#firstPageBarBtn",$("#"+tableId)).bind("click",function(){
-			memoryReqData[tableId]["currPage"]=1;//当前页码
-			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
-			memoryReqData[tableId]["startPageIndex"]=1;
-			$("#"+tableId).search(memoryReqData[tableId]);
+			//不是第一页点击首页进行请求
+			if(memoryReqData[tableId]["currPage"]!=1){
+				memoryReqData[tableId]["currPage"]=1;//当前页码
+				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+				memoryReqData[tableId]["startPageIndex"]=1;
+				$("#"+tableId).searchForTable(memoryReqData[tableId]);
+			}
 		});
 	}
 	//跳转添加绑定事件
@@ -337,24 +376,28 @@
 				$("#skipBtn",$("#"+tableId)).focus();
 				return;
 			}
-			memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
-			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
-			memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
-			$("#"+tableId).search(memoryReqData[tableId]);
+			if(memoryReqData[tableId]["currPage"]!=parseInt(skipNum)){
+				memoryReqData[tableId]["currPage"]=parseInt(skipNum);//当前页码
+				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+				memoryReqData[tableId]["startPageIndex"]=parseInt(skipNum);
+				$("#"+tableId).searchForTable(memoryReqData[tableId]);
+			}
 		});
 	}
 	//尾页添加绑定事件
 	function addClickFuncForLastPage(tableId){
 		$("#lastPageBarBtn",$("#"+tableId)).bind("click",function(){
-			memoryReqData[tableId]["currPage"]=memoryTableData[tableId]["totalPage"];//当前页码
-			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
-			var btnNum=memoryReqData[tableId]["btnNum"];
-			var newStartPageIndex=memoryTableData[tableId]["totalPage"]-btnNum+1;
-			if(newStartPageIndex<1){
-				newStartPageIndex=1;
+			if(memoryReqData[tableId]["currPage"]!=memoryTableData[tableId]["totalPage"]){
+				memoryReqData[tableId]["currPage"]=memoryTableData[tableId]["totalPage"];//当前页码
+				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
+				var btnNum=memoryReqData[tableId]["btnNum"];
+				var newStartPageIndex=memoryTableData[tableId]["totalPage"]-btnNum+1;
+				if(newStartPageIndex<1){
+					newStartPageIndex=1;
+				}
+				memoryReqData[tableId]["startPageIndex"]=newStartPageIndex;
+				$("#"+tableId).searchForTable(memoryReqData[tableId]);
 			}
-			memoryReqData[tableId]["startPageIndex"]=newStartPageIndex;
-			$("#"+tableId).search(memoryReqData[tableId]);
 		});
 	}
 	//为每个页码添加点击事件
@@ -394,7 +437,7 @@
 				}
 				memoryReqData[tableId]["currPage"]=pageNum;//当前页码
 				memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
-				$("#"+tableId).search(memoryReqData[tableId]);
+				$("#"+tableId).searchForTable(memoryReqData[tableId]);
 			});
 		})
 	}
@@ -416,7 +459,7 @@
 			memoryReqData[tableId]["currPage"]=preCurrPage;//当前页码
 			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
 			memoryReqData[tableId]["startPageIndex"]=preCurrPage;//下一开始页码为nextCurrPage
-			$("#"+tableId).search(memoryReqData[tableId]);
+			$("#"+tableId).searchForTable(memoryReqData[tableId]);
 		});
 	}
 	//绑定查向后一轮的按钮事件
@@ -439,7 +482,7 @@
 			memoryReqData[tableId]["currPage"]=nextCurrPage;//当前页码
 			memoryReqData[tableId]["autoload"]=true;//是否初始化后进行数据加载
 			memoryReqData[tableId]["startPageIndex"]=nextCurrPage;//下一开始页码为nextCurrPage
-			$("#"+tableId).search(memoryReqData[tableId]);
+			$("#"+tableId).searchForTable(memoryReqData[tableId]);
 		});
 	}
 })(jQuery);

@@ -271,3 +271,65 @@ function NoNumbers(e){
 	}
 	return !/\d/.test(keychar)
 }
+
+//jquery loading 图加载
+$.extend({
+    addimage : function() {
+    	if($("#blackloaddiv").length<1){
+    		var loadStr='<div id="blackloaddiv" style="z-index:9998;position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.2);top:0em;">';
+        	loadStr   +=	'<div style="z-index:9999;top:47%;left:47%;position:absolute;width:3em;height:3em;transform-origin:center center;">';
+        	loadStr   +=		'<img id="loadImgDiv" style="height:3em;width:3em;" src="../../../images/fqbLoading.png" />';
+        	loadStr   +=	'</div>';
+        	loadStr   +='</div>';
+            $("body").append(loadStr);
+    	}
+        var num=0;
+        this.loadingImgTime = setInterval(function() {
+        	num += 3;
+            $("#loadImgDiv").css({"transform":"rotate("+ num%360 +"deg)", "transform-origin": "50% 50%;"});
+        }, 10);
+    },
+    removeimage : function() {
+        clearInterval(this.loadingImgTime);
+        $("#blackloaddiv").remove();
+    }
+});
+
+//扩展loading加载控件,遮罩层采用bootstrap样式
+jQuery.extend({
+	//自定义bootstrap进度条加载loading图
+	loadProgressBar:function (){
+		if($("#loadProgressBarDiv").length<1){
+			var str='<div class="modal fade"  id="loadProgressBarDiv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"> ';
+			str   +=	'<div class="modal-dialog" style="max-width:350px;"> ';
+			str   +=		'<div class="modal-content "> ';
+			str   +=			'<div class="modal-body" style="text-align: center;border: 0;background: #F5F5F5;font-size: 16px;padding: 0px"> ';
+			str   +=				'<div class="progress progress-striped active" style="margin-bottom: 0px;">';
+			str   +=					'<div id="progressBarInfoDiv" class="progress-bar progress-bar-success" role="progressbar" style="width: 0%;">';
+			str   +=					'</div>';
+			str   +=				'</div>';
+			str   +=			'</div> ';
+			str   +=		'</div>';
+			str   +=	'</div>';
+			str   +='</div>';
+			$("body").append(str);
+		}
+		$('#loadProgressBarDiv').modal({
+			backdrop:'static',
+			keyboard:false
+		});
+		var i=0;
+		var interVal=setInterval(function() {
+			i++;
+	        $("#progressBarInfoDiv").attr("style", "width: "+i%10+"0%;");
+	        if(i==9){
+				 clearInterval(interVal);
+			}
+	    }, 500);
+	},
+	removeProgressBar:function(){
+		if($("#loadProgressBarDiv").length>0){
+			$("#loadProgressBarDiv").modal('hide');
+		}
+	}
+});

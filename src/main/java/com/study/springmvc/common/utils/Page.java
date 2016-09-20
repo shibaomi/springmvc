@@ -64,16 +64,25 @@ public @Data class Page<T> implements Serializable{
     private int startIndex;
     
     public Page(){}
-	public Page(int totalCount, int pageSize, int currentPage,
+    
+    public Page(int totalCount, int pageSize, int currentPage,
 			List<T> result) {
-		this(totalCount, pageSize, currentPage);
+		this(totalCount, pageSize, currentPage,null,OrderEnum.DESC);
+		this.setResult(result);
+	}
+    
+	public Page(int totalCount, int pageSize, int currentPage,
+			List<T> result,String orderField,OrderEnum orderDirection) {
+		this(totalCount, pageSize, currentPage,orderField,orderDirection);
 		this.setResult(result);
 	}
 	
-	public Page(int totalCount, int pageSize, int currentPage) {
+	public Page(int totalCount, int pageSize, int currentPage,String orderField,OrderEnum orderDirection) {
 		this.setPageSize(pageSize);
 		this.setTotalCount(totalCount);
 		this.setCurrPage(currentPage);
+		this.setOrderField(orderField);
+		this.setOrderDirection(orderDirection);
 		setPageInfo();
 	}
 	
@@ -99,7 +108,10 @@ public @Data class Page<T> implements Serializable{
 			this.nextPage=this.lastPage;
 		}
 		//开始计算数
-		this.startIndex=(this.currPage-1)*this.pageSize+1;
+		this.startIndex=(this.currPage-1)*this.pageSize;
+		if(this.startIndex<0){
+			this.startIndex=0;
+		}
 	}
 	public void setPageSize(int pageSize) {
 		if(pageSize<0){

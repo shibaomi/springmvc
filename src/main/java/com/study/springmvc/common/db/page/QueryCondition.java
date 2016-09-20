@@ -1,5 +1,8 @@
 package com.study.springmvc.common.db.page;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.study.springmvc.common.constant.OrderEnum;
 
 import lombok.Data;
@@ -48,7 +51,7 @@ public @Data class QueryCondition {
     /**
      * 查询条件
      */
-    private Object queryCondition;
+    private Map<String,Object> queryCondition=new HashMap<String,Object>();
     
 	public void setPageSize(int pageSize) {
 		if(pageSize<0){

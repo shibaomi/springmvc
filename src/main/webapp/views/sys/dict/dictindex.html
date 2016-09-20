@@ -52,8 +52,8 @@
 										<label class="control-label">字典类型</label>
 									</div>
 									<div class="col-xs-8 form_border">
-										<select class="form-control" id="menuTypeSelectDiv">
-										  <option value="9">全部</option>
+										<select class="form-control" id="dictType">
+										  <option value="">全部</option>
 										  <option value="0">系统参数</option>
 										  <option value="1">用户参数</option>
 										</select>
@@ -64,8 +64,8 @@
 										<label class="control-label">字典状态</label>
 									</div>
 									<div class="col-xs-8 form_border">
-										<select class="form-control" id="menuStsSelectDiv">
-										  <option value="9">无</option>
+										<select class="form-control" id="dictState">
+										  <option value="">无</option>
 										  <option value="0">使用</option>
 										  <option value="1">停止</option>
 										  <option value="2">删除</option>
@@ -78,6 +78,10 @@
 							<div class="form-btn text-center ">
 								<button type="button" class="btn btn-primary btn-lg" name="queryBtn" onclick="queryList();">查询</button>
 								<button type="reset" class="btn btn-primary btn-lg">清空选择</button>
+								<button type="button" onclick="test()">ddd</button>
+							</div>
+							<div id="ssff">
+								<img id='fdd' style='height:3em;width:3em;' src='../../../images/fqbLoading.png' />
 							</div>
 						</div>
 					</form>
@@ -107,7 +111,7 @@
 	<script type="text/javascript" src="../../../resources/jquery/jquery.min.js"></script>
 	<script type="text/javascript" src="../../../resources/bootstrap/js/bootstrap.js"></script>
 	<script type="text/javascript" src="../../../resources/jquery/jquery-validation-1.15.0/jquery.validate.js"></script>
-	<script type="text/javascript" src="../../../resources/jquery/jquery-form/jquery.form.js"></script>
+	<script type="text/javascript" src="../../../resources/jquery/jquery-form/jquery-form.js"></script>
 	<script type="text/javascript" src="../../../resources/jquery/jquery-validation-1.15.0/localization/messages_zh.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../../resources/assets/js/ie10-viewport-bug-workaround.js"></script>

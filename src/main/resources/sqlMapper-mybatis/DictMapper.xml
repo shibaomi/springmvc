@@ -25,10 +25,10 @@
 				and id=#{id} 
 			</if>
 			<if test="dictCode!=null and dictCode!=''">
-				and dict_code=#{dictCode} 
+				and dict_code like CONCAT('%',#{dictCode},'%' )  
 			</if>
 			<if test="dictName!=null and dictName!=''">
-				and dict_name=#{dictName} 
+				and dict_name like CONCAT('%',#{dictName},'%' )  
 			</if>
 			<if test="dictDesc!=null and dictDesc!=''">
 				and dict_desc=#{dictDesc} 
