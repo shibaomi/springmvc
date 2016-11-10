@@ -37,4 +37,14 @@ public class DictDaoImpl implements DictDao {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public DictModel queryDictModelById(String id) {
+		return baseDao.selectOne("DictModelMapper.selectByKey", id);
+	}
+
+	@Override
+	public int updateDictStateAndType(Map<String, Object> map) {
+		return baseDao.update("DictModelMapper.updateStateAndType", map);
+	}
 }

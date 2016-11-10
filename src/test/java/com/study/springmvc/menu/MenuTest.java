@@ -1,7 +1,5 @@
 package com.study.springmvc.menu;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 
 import org.junit.After;
@@ -26,6 +24,17 @@ public class MenuTest extends BaseTest{
 		System.out.println("close");
 	}
 
+	/*@Test(timeout=60000,expected=Exception.class)
+	public void testBat() {
+		
+		try {
+			List<MenuModel> l=menuService.queryListMenuModel(null);
+			System.out.println(l.size());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}*/
+	
 	@Test(timeout=60000,expected=Exception.class)
 	public void testBat() {
 		

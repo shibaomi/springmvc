@@ -22,6 +22,7 @@
     <resources mapping="/js/**" location="/js/" />
     <resources mapping="/views/**" location="/views/" />
     <resources mapping="/*.html" location="/" />
+    <resources mapping="/error/*.html" location="/error/" />
     <resources mapping="/css/**" location="/css/" />
     <resources mapping="/*.js" location="/" />
     <resources mapping="/example/**" location="/example/"></resources>
@@ -47,4 +48,10 @@
 		<!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
 		<!-- <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  -->
 	</context:component-scan>
+	
+	<beans:bean class="com.study.springmvc.controller.common.AllExceptionHandlerResolver">  
+	    <!-- <beans:property name="defaultErrorView" value="error/500"/> 错误页面  
+	    <beans:property name="exceptionAttribute" value="ex"/>   -->
+	</beans:bean>
+	
 </beans:beans>

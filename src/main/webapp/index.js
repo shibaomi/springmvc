@@ -14,13 +14,17 @@ function queryMenu(){
 }
 //查询菜单成功回调函数
 function queryMenuSucc(data){
-	if(isEmpty(data)){
-		alertMsg("未查到任何系统的菜单信息",{okBtn:true});
-		return;
-	}
-	for(var item in data){
-		globalParam.menuData=data[item].childMenu;
-		topMenuShow(globalParam.menuData);
+	if(data.status=="success"){
+		if(isEmpty(data.data)){
+			alertMsg("未查到任何系统的菜单信息",{okBtn:true});
+			return;
+		}
+		for(var item in data.data){
+			globalParam.menuData=data.data[item].childMenu;
+			topMenuShow(globalParam.menuData);
+		}
+	}else{
+		alertMsg("系统菜单查询失败："+data.message,{okBtn:true});
 	}
 }
 

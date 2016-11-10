@@ -17,7 +17,6 @@
 	</resultMap>
 	
 	<sql id="columnAll">id,dict_code,dict_name,dict_desc,dict_state,dict_opert_state,dict_type,create_time,create_by,update_time,update_by</sql>
-	
 	<sql id="whereCondition">
 		<!-- 去除语句中的第一个and或or，并自动添加where关键字 -->
 		<where>
@@ -81,14 +80,8 @@
 			<if test="dictType!=null and dictType!=''">
 				dict_type=#{dictType},
 			</if>
-			<if test="createTime!=null and createTime!=''">
-				create_time=#{createTime},
-			</if>
 			<if test="createBy!=null and createBy!=''">
 				create_by=#{createBy},
-			</if>
-			<if test="updateTime!=null and updateTime!=''">
-				update_time=#{updateTime},
 			</if>
 			<if test="updateBy!=null and updateBy!=''">
 				update_by=#{updateBy},
@@ -97,18 +90,18 @@
 	</sql>
 	
 	<select id="selectByKey" parameterType="String" resultMap="DictModel">
-		SELECT <include refid="columnAll"/> FROM sys_dic WHERE ID=#{value}
+		SELECT <include refid="columnAll"/> FROM sys_dict WHERE ID=#{value}
 	</select>
 	
 	<insert id="insertDict" parameterType="com.study.springmvc.dal.model.DictModel">
-		INSERT INTO sys_dic(<include refid="columnAll"/>) 
+		INSERT INTO sys_dict(id,dict_code,dict_name,dict_desc,dict_state,dict_opert_state,dict_type,create_by,update_by) 
 		VALUES(
-			#{id},#{dictCode},#{dictName},#{dictDesc},#{dictState},#{dictOpertState},#{dictType},#{createTime},#{createBy},#{updateTime},#{updateBy}
+			#{id},#{dictCode},#{dictName},#{dictDesc},#{dictState},#{dictOpertState},#{dictType},#{createBy},#{updateBy}
 			)
 	</insert>
 	
 	<update id="updateDict" parameterType="com.study.springmvc.dal.model.DictModel">
-		UPDATE sys_dic
+		UPDATE sys_dict
 		<!-- set条件值 -->
 		<include refid="setCondition"/>
 		<!-- where条件值 -->
@@ -116,11 +109,29 @@
 	</update>
 	
 	<delete id="deleteByKey"  parameterType="String" >
-		DELETE FROM sys_dic where ID=#{value}
+		DELETE FROM sys_dict where ID=#{value}
 	</delete>
 	
 	<select id="selectList" parameterType="map" resultMap="DictModel">
-		SELECT <include refid="columnAll"/> FROM sys_dic <include refid="whereCondition"/>
+		SELECT <include refid="columnAll"/> FROM sys_dict <include refid="whereCondition"/>
 	</select>
 	
+	<update id="updateStateAndType" parameterType="map" >
+		update sys_dict
+		<set>
+			<if test="dictState!=null and dictState!=''">
+				dict_state=#{dictState},
+			</if>
+			<if test="dictOpertState!=null and dictOpertState!=''">
+				dict_opert_state=#{dictOpertState},
+			</if>
+			<if test="dictType!=null and dictType!=''">
+				dict_type=#{dictType},
+			</if>
+			<if test="updateBy!=null and updateBy!=''">
+				update_by=#{updateBy},
+			</if>
+		</set>
+		where id=#{id}
+	</update>
 </mapper>

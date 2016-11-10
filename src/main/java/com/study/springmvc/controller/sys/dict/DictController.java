@@ -1,12 +1,15 @@
 package com.study.springmvc.controller.sys.dict;
 
 import java.util.Locale;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.study.springmvc.common.db.page.QueryCondition;
 import com.study.springmvc.common.utils.Page;
 import com.study.springmvc.dal.model.DictModel;
@@ -31,5 +34,14 @@ public class DictController {
 			Locale locale, Model model) {
 		Page<DictModel> page=dictService.queryPageDictModel(query);
 		return page;
+	}
+	
+	/***
+	 * 数据字典删除,软删除，更改数据字典状态
+	 */
+	@RequestMapping(value = "deleteDictModel")
+	@ResponseBody
+	public void deleteDictModel(@RequestParam String id) {
+		dictService.deleteDictModel(id);
 	}
 }

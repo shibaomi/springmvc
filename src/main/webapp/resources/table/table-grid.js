@@ -49,9 +49,13 @@
 			$.loadProgressBar();
 			simplePostAjax(memoryReqData[tableId],memoryReqData[tableId]["url"],function(data){
 				$("#progressBarInfoDiv").attr("style", "width: 100%;");
-				memoryTableData[tableId]=data;
-				//显示表格数据信息
-				showTabelData(tableId, data);
+				if(data.status=="success"){
+					memoryTableData[tableId]=data.data;
+					//显示表格数据信息
+					showTabelData(tableId, data.data);
+				}else{
+					alertMsg("系统菜单查询失败："+data.message,{okBtn:true});
+				}
 				$.removeProgressBar();
 			});
 		}

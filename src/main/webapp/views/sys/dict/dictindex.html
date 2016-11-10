@@ -65,7 +65,7 @@
 									</div>
 									<div class="col-xs-8 form_border">
 										<select class="form-control" id="dictState">
-										  <option value="">无</option>
+										  <option value="">全部</option>
 										  <option value="0">使用</option>
 										  <option value="1">停止</option>
 										  <option value="2">删除</option>
@@ -78,10 +78,6 @@
 							<div class="form-btn text-center ">
 								<button type="button" class="btn btn-primary btn-lg" name="queryBtn" onclick="queryList();">查询</button>
 								<button type="reset" class="btn btn-primary btn-lg">清空选择</button>
-								<button type="button" onclick="test()">ddd</button>
-							</div>
-							<div id="ssff">
-								<img id='fdd' style='height:3em;width:3em;' src='../../../images/fqbLoading.png' />
 							</div>
 						</div>
 					</form>
@@ -95,14 +91,22 @@
 			<table class="table table-bordered" id="dictTableList">
 				<thead>
 					<tr>
+						<td colspan="7" style="background:#FFFFFF">
+							<button type="button" class="btn btn-primary" onclick="addDict()">新增</button>
+							<button type="button" class="btn btn-primary" onclick="showDict()">查看</button>
+							<button type="button" class="btn btn-primary" onclick="updateDict()">修改</button>
+							<button type="button" class="btn btn-primary" onclick="deleteDict()">删除</button>
+						</td>
+					</tr>
+					<tr>
 						<th field="radio" width="50px">选择</th>
 						<!-- <th field="checkbox"><input type="checkbox"/>选择</th> -->
-						<th field="dictCode">dictCode</th>
-						<th field="dictName">dictName</th>
-						<th field="dictDesc">dictDesc</th>
-						<th field="dictState">dictState</th>
-						<th field="dictOpertState">dictOpertState</th>
-						<th field="dictType">dictType</th>
+						<th field="dictCode">字典代码</th>
+						<th field="dictName">字典名称</th>
+						<th field="dictTypeDesc">类型</th>
+						<th field="dictDesc">描述</th>
+						<th field="dictStateDesc">状态</th>
+						<th field="dictOpertStateDesc">操作状态</th>
 					</tr>
 				</thead>
 			</table>

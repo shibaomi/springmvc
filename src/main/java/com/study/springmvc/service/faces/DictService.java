@@ -23,4 +23,9 @@ public interface DictService {
 	 * 分页查询数据字典列表
 	 */
 	public Page<DictModel> queryPageDictModel(QueryCondition query);
+	
+	/***
+	 * 删除数据字典
+	 */
+	public int deleteDictModel(String id);
 }

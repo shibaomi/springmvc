@@ -51,7 +51,7 @@
 
 	<aop:config>
 		<aop:pointcut id="servicePointCut"
-			expression="execution(* com.study.springmvc.service.impl.TestServiceImpl.*(..))" />
+			expression="execution(* com.study.springmvc.service.impl.**.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="servicePointCut" />
 	</aop:config>
 

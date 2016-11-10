@@ -15,16 +15,16 @@ function queryList(){
 	$("#dictTableList").searchForTable(queryCondition);
 }
 
-function savaOrUpdateMenu(){
-	if(!$("#queryForm").valid()){
+//删除数据字典
+function deleteDict(){
+	var selectRecords=$("#dictTableList").selectRecords();
+	if(isEmpty(selectRecords)||selectRecords.length<1){
+		alertMsg("请先选择要删除的数据字典");
 		return;
 	}
-	console.log(11);
+	simplePostAjax({id:selectRecords[0].id}, "/springmvc/sys/dict/deleteDictModel", deleteDictSucc);
 }
 
-//
-function test(){
-//	$.loadProgressBar();
-//	console.log(111);
-	$.addimage();
+function deleteDictSucc(){
+	alertMsg("删除成功");
 }

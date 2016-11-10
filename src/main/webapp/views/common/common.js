@@ -174,7 +174,7 @@ function msgAppendHtml(msType,msg,headerMsg,btnType,okFunc,cancleFunc,timeOut){
 		$('#selfAlertDiv').modal('show');
 	}
 	if(msType==0&&isEmpty(okFunc)){
-		//默认2秒后关闭
+		//默认5秒后关闭
 		if(isEmpty(timeOut)){
 			timeOut=5000;
 		}
